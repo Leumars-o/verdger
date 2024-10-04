@@ -3,8 +3,13 @@ import patternDesktop from "./images/pattern-bg-desktop.png";
 function App() {
   return (
     <main>
-      <section className="flex items-center justify-center">
-        <img src={patternDesktop} alt="desktop background" className="w-full" />
+      <section className="relative overflow-hidden bg-gray-400">
+        <img
+          src={patternDesktop}
+          alt="desktop background"
+          className="absolute top-0 left-0"
+        />
+        <h1>Track IP</h1>
       </section>
     </main>
   );
