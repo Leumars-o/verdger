@@ -28,19 +28,25 @@
 (define-map products
   { product-id: uint }
   {
-    owner: principal,
+    created-by: principal,
     name: (string-ascii 50),
     description: (string-ascii 256),
+    created-at: uint,
     is-licensed: bool
   }
 )
+
+
 
 ;; public functions
 ;;
 ;; Function to create a new product
 (define-public (create-product (product-id uint) (name (string-ascii 50)) (description (string-ascii 256)))
   (let
-    ((caller tx-sender))
+    (
+        (caller tx-sender)
+        (block-time (unwrap! (get-block-info? time u0) (err u108)))
+    )
     (asserts! (is-eq caller (var-get contract-owner)) (err u100))
     (asserts! (valid-product-id? product-id) (err u105))
     (asserts! (valid-name? name) (err u106))
@@ -49,9 +55,10 @@
     (ok (map-set products
       { product-id: product-id }
       {
-        owner: caller,
+        created-by: caller,
         name: name,
         description: description,
+        created-at: block-time,
         is-licensed: false
       }
     ))
@@ -63,12 +70,12 @@
   (let
     ((product (unwrap! (map-get? products { product-id: product-id }) (err u102)))
      (caller tx-sender))
-    (asserts! (is-eq (get owner product) caller) (err u103))
+    (asserts! (is-eq (get created-by product) caller) (err u103))
     (asserts! (valid-product-id? product-id) (err u105))
     (asserts! (not (get is-licensed product)) (err u104))
     (ok (map-set products
       { product-id: product-id }
-      (merge product { owner: buyer, is-licensed: true })
+      (merge product { created-by: buyer, is-licensed: true })
     ))
   )
 )
