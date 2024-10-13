@@ -1,4 +1,5 @@
 
+
 ;; title: authentify-v2
 ;; version: 0.2.0
 ;; summary: Authentify is a smart contract for managing authentication and verification of products.
@@ -137,8 +138,6 @@
         status: (string-ascii 20)  ;; "pending", "approved", "expired", "completed" "cancelled"
     }
 )
-
-
 
 ;; public functions
 ;;
