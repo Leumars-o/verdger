@@ -19,6 +19,12 @@
 (define-constant MIN_NAME_LENGTH u1)
 (define-constant MIN_DESCRIPTION_LENGTH u1)
 
+;; Define dispute codes
+(define-constant DISPUTE_NONE u0)
+(define-constant DISPUTE_STOLEN u1)
+(define-constant DISPUTE_LOST u2)
+(define-constant DISPUTE_DAMAGED u3)
+
 ;; data vars
 ;;
 
@@ -32,11 +38,10 @@
     name: (string-ascii 50),
     description: (string-ascii 256),
     created-at: uint,
-    is-licensed: bool
+    is-licensed: bool,
+    dispute: uint
   }
 )
-
-
 
 ;; public functions
 ;;
@@ -59,7 +64,8 @@
         name: name,
         description: description,
         created-at: block-time,
-        is-licensed: false
+        is-licensed: false,
+        dispute: u0
       }
     ))
   )
@@ -68,14 +74,34 @@
 ;; Define a function to license a product to a buyer
 (define-public (license-product (product-id uint) (buyer principal))
   (let
-    ((product (unwrap! (map-get? products { product-id: product-id }) (err u102)))
-     (caller tx-sender))
+    (
+        (product (unwrap! (map-get? products { product-id: product-id }) (err u102)))
+        (caller tx-sender)
+    )
     (asserts! (is-eq (get created-by product) caller) (err u103))
     (asserts! (valid-product-id? product-id) (err u105))
     (asserts! (not (get is-licensed product)) (err u104))
     (ok (map-set products
       { product-id: product-id }
       (merge product { created-by: buyer, is-licensed: true })
+    ))
+  )
+)
+
+;; Define a function to dispute a product
+(define-public (dispute-product (product-id uint) (dispute-code uint))
+  (let
+    (
+        (product (unwrap! (map-get? products { product-id: product-id }) (err u102)))
+        (caller tx-sender)
+    )
+    (asserts! (is-eq (get created-by product) caller) (err u103))
+    (asserts! (valid-product-id? product-id) (err u105))
+    (asserts! (valid-dispute-code? dispute-code) (err u108))
+    (asserts! (not (get is-licensed product)) (err u104))
+    (ok (map-set products
+      { product-id: product-id }
+      (merge product { dispute: dispute-code })
     ))
   )
 )
@@ -113,3 +139,12 @@
   )
 )
 
+;; Helper function to validate dispute codes
+(define-private (valid-dispute-code? (dispute-code uint))
+  (or
+    (is-eq dispute-code DISPUTE_NONE)
+    (is-eq dispute-code DISPUTE_STOLEN)
+    (is-eq dispute-code DISPUTE_LOST)
+    (is-eq dispute-code DISPUTE_DAMAGED)
+  )
+)
