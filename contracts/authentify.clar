@@ -109,6 +109,7 @@
     (asserts! (valid-product-id? product-id) (err u105))
     (asserts! (is-eq (get created-by product) caller) (err u103))
     (asserts! (not (get is-licensed product)) (err u104))
+    (asserts! (not (is-eq buyer caller)) (err u115))
 
     
     (map-set products
@@ -170,6 +171,7 @@
         (asserts! (valid-product-id? product-id) (err u105))
         (asserts! (get is-licensed product) (err u111))
         (asserts! (is-eq (get current-owner license) caller) (err u112))
+        (asserts! (not (is-eq new-owner caller)) (err u115))
 
         (map-set products
             { product-id: product-id }
