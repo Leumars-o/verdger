@@ -19,6 +19,21 @@
 (define-constant MIN_NAME_LENGTH u1)
 (define-constant MIN_DESCRIPTION_LENGTH u1)
 
+;; Define error codes
+(define-constant ERR_UNAUTHORIZED u100)
+(define-constant ERR_PRODUCT_EXISTS u101)
+(define-constant ERR_PRODUCT_NOT_FOUND u102)
+(define-constant ERR_INVALID_CREATOR u103)
+(define-constant ERR_PRODUCT_ALREADY_LICENSED u104)
+(define-constant ERR_INVALID_PRODUCT_ID u105)
+(define-constant ERR_INVALID_NAME u106)
+(define-constant ERR_INVALID_DESCRIPTION u107)
+(define-constant ERR_INVALID_DISPUTE_CODE u108)
+(define-constant ERR_INVALID_GET_RESPONSE u109)
+(define-constant ERR_INVALID_TRANSFER_ID u110)
+(define-constant ERR_INVALID_SET_RESPONSE u111)
+
+
 ;; Define dispute codes
 (define-constant DISPUTE_NONE u0)
 (define-constant DISPUTE_STOLEN u1)
@@ -32,6 +47,26 @@
 
 ;; data maps
 ;;
+;; Define error codes with their corresponding messages
+(define-map error-messages
+  uint
+  (string-ascii 50)
+)
+
+;; Initialize error messages
+(map-set error-messages ERR_UNAUTHORIZED "ERR_UNAUTHORIZED")
+(map-set error-messages ERR_PRODUCT_EXISTS "ERR_PRODUCT_EXISTS")
+(map-set error-messages ERR_PRODUCT_NOT_FOUND "ERR_PRODUCT_NOT_FOUND")
+(map-set error-messages ERR_INVALID_CREATOR "ERR_INVALID_CREATOR")
+(map-set error-messages ERR_PRODUCT_ALREADY_LICENSED "ERR_PRODUCT_ALREADY_LICENSED")
+(map-set error-messages ERR_INVALID_PRODUCT_ID "ERR_INVALID_PRODUCT_ID")
+(map-set error-messages ERR_INVALID_NAME "ERR_INVALID_NAME")
+(map-set error-messages ERR_INVALID_DESCRIPTION "ERR_INVALID_DESCRIPTION")
+(map-set error-messages ERR_INVALID_DISPUTE_CODE "ERR_INVALID_DISPUTE_CODE")
+(map-set error-messages ERR_INVALID_GET_RESPONSE "ERR_INVALID_GET_RESPONSE")
+(map-set error-messages ERR_INVALID_TRANSFER_ID "ERR_INVALID_TRANSFER_ID")
+(map-set error-messages ERR_INVALID_SET_RESPONSE "ERR_INVALID_SET_RESPONSE")
+
 ;; Map to store product information
 (define-map products
   { product-id: uint }
@@ -75,13 +110,13 @@
   (let
     (
         (caller tx-sender)
-        (block-time (unwrap! (get-block-info? time u0) (err u108)))
+        (block-time (unwrap! (get-block-info? time u0) (err-with-message ERR_INVALID_GET_RESPONSE)))
     )
-    (asserts! (is-eq caller (var-get contract-owner)) (err u100))
-    (asserts! (valid-product-id? product-id) (err u105))
-    (asserts! (valid-name? name) (err u106))
-    (asserts! (valid-description? description) (err u107))
-    (asserts! (is-none (map-get? products { product-id: product-id })) (err u101))
+    (asserts! (is-eq caller (var-get contract-owner)) (err-with-message ERR_UNAUTHORIZED))
+    (asserts! (valid-product-id? product-id) (err-with-message ERR_INVALID_PRODUCT_ID))
+    (asserts! (valid-name? name) (err-with-message ERR_INVALID_NAME))
+    (asserts! (valid-description? description) (err-with-message ERR_INVALID_DESCRIPTION))
+    (asserts! (is-none (map-get? products { product-id: product-id })) (err-with-message ERR_PRODUCT_EXISTS))
     (ok (map-set products
       { product-id: product-id }
       {
@@ -101,15 +136,15 @@
 (define-public (license-product (product-id uint) (buyer principal))
   (let
     (
-        (product (unwrap! (map-get? products { product-id: product-id }) (err u102)))
+        (product (unwrap! (map-get? products { product-id: product-id }) (err-with-message ERR_PRODUCT_NOT_FOUND)))
         (caller tx-sender)
-        (block-time (unwrap! (get-block-info? time u0) (err u108)))
+        (block-time (unwrap! (get-block-info? time u0) (err-with-message ERR_INVALID_GET_RESPONSE)))
         (transfer-id (generate-transfer-id))
     )
-    (asserts! (valid-product-id? product-id) (err u105))
-    (asserts! (is-eq (get created-by product) caller) (err u103))
-    (asserts! (not (get is-licensed product)) (err u104))
-    (asserts! (not (is-eq buyer caller)) (err u115))
+    (asserts! (valid-product-id? product-id) (err-with-message ERR_INVALID_PRODUCT_ID))
+    (asserts! (is-eq (get created-by product) caller) (err-with-message ERR_INVALID_CREATOR))
+    (asserts! (not (get is-licensed product)) (err-with-message ERR_PRODUCT_ALREADY_LICENSED))
+    (asserts! (not (is-eq buyer caller)) (err-with-message ERR_UNAUTHORIZED))
 
     
     (map-set products
@@ -121,7 +156,7 @@
         (map-set products
             { product-id: product-id }
             (merge product { owner: (some buyer), is-licensed: true })
-        ) (err u114)
+        ) (err-with-message ERR_INVALID_SET_RESPONSE)
     )
 
     (map-set ownership-transfers
@@ -143,7 +178,7 @@
                 to: buyer,
                 transferred-at: block-time
             }
-        ) (err u114)
+        ) (err-with-message ERR_INVALID_SET_RESPONSE)
     )
 
     (ok (map-set product-licenses
@@ -161,17 +196,17 @@
 (define-public (transfer-ownership (product-id uint) (new-owner principal)) 
     (let
         (
-            (product (unwrap! (map-get? products { product-id: product-id }) (err u102)))
-            (license (unwrap! (map-get? product-licenses { product-id: product-id }) (err u110)))
+            (product (unwrap! (map-get? products { product-id: product-id }) (err-with-message ERR_PRODUCT_NOT_FOUND)))
+            (license (unwrap! (map-get? product-licenses { product-id: product-id }) (err-with-message ERR_INVALID_GET_RESPONSE)))
             (caller tx-sender)
-            (block-time (unwrap! (get-block-info? time u0) (err u108)))
+            (block-time (unwrap! (get-block-info? time u0) (err-with-message ERR_INVALID_GET_RESPONSE)))
             (transfer-id (generate-transfer-id))
         )
         
-        (asserts! (valid-product-id? product-id) (err u105))
-        (asserts! (get is-licensed product) (err u111))
-        (asserts! (is-eq (get current-owner license) caller) (err u112))
-        (asserts! (not (is-eq new-owner caller)) (err u115))
+        (asserts! (valid-product-id? product-id) (err-with-message ERR_INVALID_PRODUCT_ID))
+        (asserts! (get is-licensed product) (err-with-message ERR_PRODUCT_ALREADY_LICENSED))
+        (asserts! (is-eq (get current-owner license) caller) (err-with-message ERR_UNAUTHORIZED))
+        (asserts! (not (is-eq new-owner caller)) (err-with-message ERR_UNAUTHORIZED))
 
         (map-set products
             { product-id: product-id }
@@ -182,7 +217,7 @@
             (map-set products
                 { product-id: product-id }
                 (merge product { owner: (some new-owner) })
-            ) (err u114)
+            ) (err-with-message ERR_INVALID_SET_RESPONSE)
         )
 
         (map-set ownership-transfers
@@ -204,7 +239,7 @@
                     to: new-owner,
                     transferred-at: block-time
                 }
-            ) (err u114)
+            ) (err-with-message ERR_INVALID_SET_RESPONSE)
         )
 
         (ok (map-set product-licenses 
@@ -217,7 +252,7 @@
                             (append (get license-history license) transfer-id)
                             u200
                         ) 
-                        (err u113)
+                        (err-with-message ERR_INVALID_SET_RESPONSE)
                     )
                 }
             )
@@ -229,12 +264,12 @@
 (define-public (dispute-product (product-id uint) (dispute-code uint))
   (let
     (
-        (product (unwrap! (map-get? products { product-id: product-id }) (err u102)))
+        (product (unwrap! (map-get? products { product-id: product-id }) (err-with-message ERR_PRODUCT_NOT_FOUND)))
         (caller tx-sender)
     )
-    (asserts! (is-eq (get created-by product) caller) (err u103))
-    (asserts! (valid-product-id? product-id) (err u105))
-    (asserts! (valid-dispute-code? dispute-code) (err u108))
+    (asserts! (is-eq (get created-by product) caller) (err-with-message ERR_INVALID_CREATOR))
+    (asserts! (valid-product-id? product-id) (err-with-message ERR_INVALID_PRODUCT_ID))
+    (asserts! (valid-dispute-code? dispute-code) (err-with-message ERR_INVALID_DISPUTE_CODE))
 
     (ok (map-set products
       { product-id: product-id }
@@ -313,4 +348,13 @@
     (var-set transfer-id-nonce (+ current-id u1))
     current-id
   )
+)
+;; Helper function to get error message
+(define-private (get-error-message (error-code uint))
+  (default-to "UNKNOWN_ERROR" (map-get? error-messages error-code))
+)
+
+;; Modified error response function
+(define-private (err-with-message (error-code uint))
+  (err (tuple (code error-code) (message (get-error-message error-code))))
 )
