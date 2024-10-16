@@ -11,6 +11,9 @@ export default {
       fontSize: {
         16: "1.6rem",
       },
+      padding: {
+        50: "13rem",
+      },
     },
   },
   plugins: [],
