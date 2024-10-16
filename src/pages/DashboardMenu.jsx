@@ -198,6 +198,103 @@ function DashboardMenu() {
             </button>
           </article>
         </div>
+
+        <button className="px-6 py-4 mt-6 text-white rounded-full text-13 bg-cta">
+          View All Items {">"}
+          {">"}
+        </button>
+      </div>
+
+      <div>
+        <h2 className="font-semibold text-28">Recent activities</h2>
+
+        <ul className="rounded-2xl bg-primary text-13">
+          <li className="grid grid-cols-10 gap-4 px-10 py-6">
+            <span className="col-span-1">Item Detail</span>
+            <span className="col-start-6">Date</span>
+            <span className="col-start-10">Activity</span>
+          </li>
+
+          <li className="grid items-center grid-cols-10 gap-4 px-10 py-6 bg-white">
+            <figure className="col-span-1 h-36 bg-primary rounded-xl"></figure>
+
+            <span className="col-span-3 col-start-2">
+              <h5 className="mb-2 font-semibold">iPhone 16 Pro Max</h5>
+              <p>Blockchain ID: 0xA79BF12009F8E4C1A4F2</p>
+              <p>Registered by: 0xA12B34CD5678EF901 (you)</p>
+            </span>
+            <span className="col-start-6">11/10/2024</span>
+
+            <button className="col-start-10 px-6 py-2 text-left bg-opacity-50 border-2 rounded-full bg-primary">
+              Created
+            </button>
+          </li>
+
+          <li className="grid items-center grid-cols-10 gap-4 px-10 py-6 bg-white">
+            <figure className="col-span-1 h-36 bg-primary rounded-xl"></figure>
+
+            <span className="col-span-3 col-start-2">
+              <h5 className="mb-2 font-semibold">iPhone 16 Pro Max</h5>
+              <p>Blockchain ID: 0xA79BF12009F8E4C1A4F2</p>
+              <p>Registered by: 0xA12B34CD5678EF901 (you)</p>
+            </span>
+            <span className="col-start-6">11/10/2024</span>
+
+            <button className="col-start-10 px-6 py-2 text-left bg-opacity-50 border-2 rounded-full bg-primary">
+              Created
+            </button>
+          </li>
+
+          <li className="grid items-center grid-cols-10 gap-4 px-10 py-6 bg-white">
+            <figure className="col-span-1 h-36 bg-primary rounded-xl"></figure>
+
+            <span className="col-span-3 col-start-2">
+              <h5 className="mb-2 font-semibold">iPhone 16 Pro Max</h5>
+              <p>Blockchain ID: 0xA79BF12009F8E4C1A4F2</p>
+              <p>Registered by: 0xA12B34CD5678EF901 (you)</p>
+            </span>
+            <span className="col-start-6">11/10/2024</span>
+
+            <button className="col-start-10 px-6 py-2 text-left bg-opacity-50 border-2 rounded-full bg-primary">
+              Created
+            </button>
+          </li>
+
+          <li className="grid items-center grid-cols-10 gap-4 px-10 py-6 bg-white">
+            <figure className="col-span-1 h-36 bg-primary rounded-xl"></figure>
+
+            <span className="col-span-3 col-start-2">
+              <h5 className="mb-2 font-semibold">iPhone 16 Pro Max</h5>
+              <p>Blockchain ID: 0xA79BF12009F8E4C1A4F2</p>
+              <p>Registered by: 0xA12B34CD5678EF901 (you)</p>
+            </span>
+            <span className="col-start-6">11/10/2024</span>
+
+            <button className="col-start-10 px-6 py-2 text-left bg-opacity-50 border-2 rounded-full bg-primary">
+              Created
+            </button>
+          </li>
+
+          <li className="grid items-center grid-cols-10 gap-4 px-10 py-6 bg-white">
+            <figure className="col-span-1 h-36 bg-primary rounded-xl"></figure>
+
+            <span className="col-span-3 col-start-2">
+              <h5 className="mb-2 font-semibold">iPhone 16 Pro Max</h5>
+              <p>Blockchain ID: 0xA79BF12009F8E4C1A4F2</p>
+              <p>Registered by: 0xA12B34CD5678EF901 (you)</p>
+            </span>
+            <span className="col-start-6">11/10/2024</span>
+
+            <button className="col-start-10 px-6 py-2 text-left bg-opacity-50 border-2 rounded-full bg-primary">
+              Created
+            </button>
+          </li>
+        </ul>
+
+        <button className="px-12 py-3 mt-6 text-white rounded-full text-13 bg-cta">
+          View All Items {">"}
+          {">"}
+        </button>
       </div>
     </section>
   );
