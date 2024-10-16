@@ -16,21 +16,30 @@ function Dashboard() {
 
         <ul className="flex flex-col gap-10 text-16">
           <li>
-            <Link className="flex items-center w-full gap-3 px-4 py-6 transition-colors duration-500 rounded-xl hover:bg-secondary">
+            <Link
+              to="/dashboard"
+              className="flex items-center w-full gap-3 px-4 py-6 transition-colors duration-500 rounded-xl hover:bg-secondary"
+            >
               <img src={dashIcon} alt="icon for dashboard" />
               <span>Dashboard</span>
             </Link>
           </li>
 
           <li>
-            <Link className="flex items-center w-full gap-3 px-4 py-6 transition-colors duration-500 rounded-xl hover:bg-secondary">
+            <Link
+              to="/verify-item"
+              className="flex items-center w-full gap-3 px-4 py-6 transition-colors duration-500 rounded-xl hover:bg-secondary"
+            >
               <img src={verifyIcon} alt="icon for dashboard" />
               <span>Verify Item</span>
             </Link>
           </li>
 
           <li>
-            <Link className="flex items-center w-full gap-3 px-4 py-6 transition-colors duration-500 rounded-xl hover:bg-secondary">
+            <Link
+              to="/my-assets"
+              className="flex items-center w-full gap-3 px-4 py-6 transition-colors duration-500 rounded-xl hover:bg-secondary"
+            >
               <img src={assetIcon} alt="icon for dashboard" />
               <span>My Assets</span>
             </Link>
