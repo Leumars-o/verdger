@@ -5,7 +5,21 @@ import receiveIcon from "../assets/received.svg";
 
 function DashboardMenu() {
   return (
-    <section className="flex flex-col flex-1 gap-8 px-10 py-50 bg-primary bg-opacity-30">
+    <section className="flex flex-col flex-1 gap-8 px-10 py-20 bg-primary bg-opacity-30">
+      <form action="" className="flex items-center gap-8 mb-16">
+        <input
+          type="search"
+          placeholder="Type product ID"
+          className="w-4/5 px-4 py-6 bg-transparent border-2 outline-none rounded-xl border-primary text-12"
+        />
+        <button
+          type="submit"
+          className="flex-1 px-4 py-6 font-medium text-white bg-cta rounded-xl text-12"
+        >
+          Check
+        </button>
+      </form>
+
       <ul className="flex items-center gap-8">
         <li className="flex items-center w-1/4 gap-4 px-4 py-6 bg-white border-2 rounded-xl border-primary">
           <figure className="w-24 h-24 overflow-hidden">
@@ -67,20 +81,6 @@ function DashboardMenu() {
           </div>
         </li>
       </ul>
-
-      <form action="" className="flex items-center gap-8 mt-24">
-        <input
-          type="search"
-          placeholder="Type product ID"
-          className="w-4/5 px-4 py-6 bg-transparent border-2 outline-none rounded-xl border-primary text-12"
-        />
-        <button
-          type="submit"
-          className="flex-1 px-4 py-6 font-medium text-white bg-cta rounded-xl text-12"
-        >
-          Check
-        </button>
-      </form>
 
       <div>
         <div className="flex items-center justify-between mb-8">
@@ -275,7 +275,7 @@ function DashboardMenu() {
             </button>
           </li>
 
-          <li className="grid items-center grid-cols-10 gap-4 px-10 py-6 bg-white">
+          <li className="grid items-center grid-cols-10 gap-4 px-10 py-6 bg-white rounded-b-2xl">
             <figure className="col-span-1 h-36 bg-primary rounded-xl"></figure>
 
             <span className="col-span-3 col-start-2">
