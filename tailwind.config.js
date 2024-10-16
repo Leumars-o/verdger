@@ -8,6 +8,9 @@ export default {
         secondary: "#CCCCCC",
         cta: "#323232",
       },
+      fontSize: {
+        16: "1.6rem",
+      },
     },
   },
   plugins: [],
