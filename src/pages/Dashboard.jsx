@@ -9,28 +9,28 @@ import doorIcon from "../assets/door-01.svg";
 function Dashboard() {
   return (
     <main className="flex items-stretch min-h-screen">
-      <aside className="flex flex-col items-start justify-start w-1/5 py-20 pl-20 bg-primary">
+      <aside className="flex flex-col justify-start w-1/5 py-20 pl-20 pr-12 bg-primary">
         <figure className="mb-24">
           <img src={verger} alt="verger logo icon" />
         </figure>
 
-        <ul className="flex flex-col gap-8">
+        <ul className="flex flex-col gap-10 text-16">
           <li>
-            <Link className="flex items-center gap-3">
+            <Link className="flex items-center w-full gap-3 px-4 py-6 transition-colors duration-500 rounded-xl hover:bg-secondary">
               <img src={dashIcon} alt="icon for dashboard" />
               <span>Dashboard</span>
             </Link>
           </li>
 
           <li>
-            <Link className="flex items-center gap-3">
+            <Link className="flex items-center w-full gap-3 px-4 py-6 transition-colors duration-500 rounded-xl hover:bg-secondary">
               <img src={verifyIcon} alt="icon for dashboard" />
               <span>Verify Item</span>
             </Link>
           </li>
 
           <li>
-            <Link className="flex items-center gap-3">
+            <Link className="flex items-center w-full gap-3 px-4 py-6 transition-colors duration-500 rounded-xl hover:bg-secondary">
               <img src={assetIcon} alt="icon for dashboard" />
               <span>My Assets</span>
             </Link>
