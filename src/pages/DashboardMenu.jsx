@@ -1,11 +1,14 @@
 import itemsIcon from "../assets/items-icon.svg";
+import createdIcon from "../assets/created.svg";
+import transferIcon from "../assets/transferred.svg";
+import receiveIcon from "../assets/received.svg";
 
 function DashboardMenu() {
   return (
-    <section className="flex-1 px-10 py-50 bg-primary bg-opacity-30">
+    <section className="flex flex-col flex-1 gap-8 px-10 py-50 bg-primary bg-opacity-30">
       <ul className="flex items-center gap-8">
         <li className="flex items-center w-1/4 gap-4 px-4 py-6 bg-white border-2 rounded-xl border-primary">
-          <figure className="w-16 h-16 overflow-hidden">
+          <figure className="w-24 h-24 overflow-hidden">
             <img
               src={itemsIcon}
               alt="dashboard all items icon"
@@ -20,9 +23,9 @@ function DashboardMenu() {
         </li>
 
         <li className="flex items-center w-1/4 gap-4 px-4 py-6 bg-white border-2 rounded-xl border-secondary">
-          <figure className="w-16 h-16 overflow-hidden">
+          <figure className="w-24 h-24 overflow-hidden">
             <img
-              src={itemsIcon}
+              src={createdIcon}
               alt="dashboard all items icon"
               className="block object-cover w-full h-full"
             />
@@ -35,9 +38,9 @@ function DashboardMenu() {
         </li>
 
         <li className="flex items-center w-1/4 gap-4 px-4 py-6 bg-white border-2 rounded-xl border-secondary">
-          <figure className="w-16 h-16 overflow-hidden">
+          <figure className="w-24 h-24 overflow-hidden">
             <img
-              src={itemsIcon}
+              src={transferIcon}
               alt="dashboard all items icon"
               className="block object-cover w-full h-full"
             />
@@ -50,9 +53,9 @@ function DashboardMenu() {
         </li>
 
         <li className="flex items-center w-1/4 gap-4 px-4 py-6 bg-white border-2 rounded-xl border-secondary">
-          <figure className="w-16 h-16 overflow-hidden">
+          <figure className="w-24 h-24 overflow-hidden">
             <img
-              src={itemsIcon}
+              src={receiveIcon}
               alt="dashboard all items icon"
               className="block object-cover w-full h-full"
             />
@@ -64,6 +67,20 @@ function DashboardMenu() {
           </div>
         </li>
       </ul>
+
+      <form action="" className="flex items-center gap-8 mt-24">
+        <input
+          type="search"
+          placeholder="Type product ID"
+          className="w-4/5 px-4 py-6 bg-transparent border-2 outline-none rounded-xl border-primary text-12"
+        />
+        <button
+          type="submit"
+          className="flex-1 px-4 py-6 font-medium text-white bg-cta rounded-xl text-12"
+        >
+          Check
+        </button>
+      </form>
     </section>
   );
 }
