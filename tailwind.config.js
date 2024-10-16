@@ -9,7 +9,9 @@ export default {
         cta: "#323232",
       },
       fontSize: {
+        12: "1.2rem",
         16: "1.6rem",
+        28: "2.8rem",
       },
       padding: {
         50: "13rem",

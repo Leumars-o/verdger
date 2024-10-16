@@ -14,22 +14,8 @@ function DashboardMenu() {
           </figure>
 
           <div className="flex flex-col leading-tight">
-            <span>12</span>
-            <span>All items</span>
-          </div>
-        </li>
-        <li className="flex items-center w-1/4 gap-4 px-4 py-6 bg-white border-2 rounded-xl border-secondary">
-          <figure className="w-16 h-16 overflow-hidden">
-            <img
-              src={itemsIcon}
-              alt="dashboard all items icon"
-              className="block object-cover w-full h-full"
-            />
-          </figure>
-
-          <div className="flex flex-col leading-tight">
-            <span>12</span>
-            <span>All items</span>
+            <span className="font-semibold text-28">12</span>
+            <span className="text-12">All items</span>
           </div>
         </li>
 
@@ -43,10 +29,11 @@ function DashboardMenu() {
           </figure>
 
           <div className="flex flex-col leading-tight">
-            <span>12</span>
-            <span>All items</span>
+            <span className="font-semibold text-28">8</span>
+            <span className="text-12">Created items</span>
           </div>
         </li>
+
         <li className="flex items-center w-1/4 gap-4 px-4 py-6 bg-white border-2 rounded-xl border-secondary">
           <figure className="w-16 h-16 overflow-hidden">
             <img
@@ -57,8 +44,23 @@ function DashboardMenu() {
           </figure>
 
           <div className="flex flex-col leading-tight">
-            <span>12</span>
-            <span>All items</span>
+            <span className="font-semibold text-28">3</span>
+            <span className="text-12">Transferred item</span>
+          </div>
+        </li>
+
+        <li className="flex items-center w-1/4 gap-4 px-4 py-6 bg-white border-2 rounded-xl border-secondary">
+          <figure className="w-16 h-16 overflow-hidden">
+            <img
+              src={itemsIcon}
+              alt="dashboard all items icon"
+              className="block object-cover w-full h-full"
+            />
+          </figure>
+
+          <div className="flex flex-col leading-tight">
+            <span className="font-semibold text-28">1</span>
+            <span className="text-12">Received item</span>
           </div>
         </li>
       </ul>
