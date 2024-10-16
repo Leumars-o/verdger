@@ -206,7 +206,7 @@ function DashboardMenu() {
       </div>
 
       <div>
-        <h2 className="font-semibold text-28">Recent activities</h2>
+        <h2 className="mb-8 font-semibold text-28">Recent activities</h2>
 
         <ul className="rounded-2xl bg-primary text-13">
           <li className="grid grid-cols-10 gap-4 px-10 py-6">
