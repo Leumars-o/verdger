@@ -4,6 +4,10 @@ import transferIcon from "../assets/transferred.svg";
 import receiveIcon from "../assets/received.svg";
 
 function DashboardMenu() {
+  const handleProductCreation = function () {
+    console.log(true);
+  };
+
   return (
     <section className="flex flex-col flex-1 gap-8 px-10 py-20 bg-primary bg-opacity-30">
       <form action="" className="flex items-center gap-8 mb-16">
@@ -86,7 +90,10 @@ function DashboardMenu() {
         <div className="flex items-center justify-between mb-8">
           <h2 className="font-semibold text-28">Your Items</h2>
 
-          <button className="flex items-center justify-center gap-2 px-8 py-2 bg-white border-2 rounded-full text-12">
+          <button
+            className="flex items-center justify-center gap-2 px-8 py-2 bg-white border-2 rounded-full text-12"
+            onClick={handleProductCreation}
+          >
             <span>Add new Item</span>
             <span>+</span>
           </button>
