@@ -139,6 +139,12 @@
     }
 )
 
+;; Define map to keep track of assets
+(define-map user-assets
+    principal
+    (list 1000 uint)
+)
+
 ;; public functions
 ;;
 ;; Function to create a new product
