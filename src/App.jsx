@@ -3,6 +3,7 @@ import { BrowserRouter, Routes } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import DashboardMenu from "./pages/DashboardMenu";
 import VerifyItem from "./pages/VerifyItem";
+import Assets from "./pages/Assets";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
           <Route index element={<DashboardMenu />} />
           <Route path="dashboard" element={<DashboardMenu />} />
           <Route path="verify-item" element={<VerifyItem />} />
+          <Route path="my-assets" element={<Assets />} />
         </Route>
       </Routes>
     </BrowserRouter>
