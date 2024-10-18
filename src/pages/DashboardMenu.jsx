@@ -365,8 +365,19 @@ function DashboardMenu() {
             <input
               type="text"
               id="product-name"
-              className="w-full px-4 py-8 bg-white rounded-2xl bg-opacity-55"
+              className="w-full p-4 bg-white rounded-2xl bg-opacity-55 outline-none text-16"
             />
+
+            <label
+              htmlFor="description"
+              className="self-start text-16 font-semibold mt-8 text-cta"
+            >
+              Description
+            </label>
+            <textarea
+              id="description"
+              className="w-full h-56 p-4 bg-white rounded-2xl bg-opacity-55 outline-none text-16"
+            ></textarea>
           </form>
         </section>
       )}
