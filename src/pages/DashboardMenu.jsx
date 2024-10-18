@@ -34,7 +34,7 @@ function DashboardMenu() {
 
   return (
     <>
-      <section className="flex flex-col flex-1 gap-8 px-10 py-20 bg-primary bg-opacity-30">
+      <section className="flex flex-col flex-1 gap-8 px-10 py-20 bg-primary bg-opacity-30 overflow-auto">
         <form action="" className="flex items-center gap-8 mb-16">
           <input
             type="search"
