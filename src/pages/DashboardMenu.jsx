@@ -333,13 +333,18 @@ function DashboardMenu() {
       {modal && (
         <section className="absolute flex flex-col items-center w-full h-full p-10 bg-secondary bg-opacity-60 backdrop-blur">
           <button
-            className="self-end block text-28 mb-10"
+            className="self-end block text-28 mb-4"
             onClick={handleProductCreation}
           >
             &times;
           </button>
 
-          <form action="" className="w-1/2 flex flex-col items-center gap-3">
+          <h1 className="text-28 font-semibold">Add Product Item</h1>
+
+          <form
+            action=""
+            className="w-1/2 flex flex-col items-center gap-3 mt-8"
+          >
             <figure
               className="w-full h-[35rem] bg-opacity-55 rounded-2xl bg-secondary hover:cursor-pointer"
               onClick={uploadImage}
