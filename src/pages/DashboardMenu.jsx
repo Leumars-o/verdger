@@ -376,8 +376,15 @@ function DashboardMenu() {
             </label>
             <textarea
               id="description"
-              className="w-full h-56 p-4 bg-white rounded-2xl bg-opacity-55 outline-none text-16"
+              className="w-full h-56 p-4 bg-white rounded-2xl bg-opacity-55 outline-none text-12"
             ></textarea>
+
+            <button
+              type="submit"
+              className="w-full bg-cta mt-10 py-4 text-16 rounded-2xl text-white font-semibold"
+            >
+              Create Product
+            </button>
           </form>
         </section>
       )}
