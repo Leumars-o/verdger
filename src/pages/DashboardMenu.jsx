@@ -2,8 +2,8 @@ import itemsIcon from "../assets/items-icon.svg";
 import createdIcon from "../assets/created.svg";
 import transferIcon from "../assets/transferred.svg";
 import receiveIcon from "../assets/received.svg";
+import userIcon from '../assets/user-icon.svg'
 import { useState } from "react";
-// import connectWallet from "../util/connectWallet";
 import {AppConfig, showConnect, UserSession} from '@stacks/connect'
 
 function DashboardMenu() {
@@ -63,10 +63,17 @@ function DashboardMenu() {
             placeholder="Type product ID"
             className="w-3/5 px-4 py-6 bg-transparent border-2 outline-none rounded-xl border-primary text-12"
           />
-          <button className="w-1/5 px-4 py-6 font-medium text-white bg-cta rounded-xl text-12" onClick={(e) => {
+
+          {!address && <button className="w-1/5 px-4 py-6 font-medium text-white bg-cta rounded-xl text-12" onClick={(e) => {
             e.preventDefault()
             handleConnectWallet()
-          }}>Connect Wallet</button>
+          }}>Connect Wallet</button>}
+
+          {address && <button className="flex-1 bg-cta px-4 py-6 text-white rounded-xl text-12 flex items-center justify-center gap-2">
+            <img src={userIcon} alt="an-icon-for-user" className="w-9 h-9" />
+            <span>{address.slice(0, 15) + '....'}</span>
+            </button>}
+
           <button
             type="submit"
             className="flex-1 px-4 py-6 font-medium text-white bg-cta rounded-xl text-12"
