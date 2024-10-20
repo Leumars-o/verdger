@@ -2,34 +2,34 @@ import itemsIcon from "../assets/items-icon.svg";
 import createdIcon from "../assets/created.svg";
 import transferIcon from "../assets/transferred.svg";
 import receiveIcon from "../assets/received.svg";
-import userIcon from '../assets/user-icon.svg'
+import userIcon from "../assets/user-icon.svg";
+import walletIcon from "../assets/wallet.svg";
 import { useState } from "react";
-import {AppConfig, showConnect, UserSession} from '@stacks/connect'
+import { AppConfig, showConnect, UserSession } from "@stacks/connect";
 
 function DashboardMenu() {
   const [modal, setModal] = useState(false);
-  const [image, setImage] = useState('');
+  const [image, setImage] = useState("");
   const [address, setAddress] = useState();
 
-  const appConfig = new AppConfig(['store_write', 'publish_data'])
-  const userSession = new UserSession({appConfig})
+  const appConfig = new AppConfig(["store_write", "publish_data"]);
+  const userSession = new UserSession({ appConfig });
 
   function handleConnectWallet() {
     showConnect({
       appDetails: {
-        name: 'Verdger',
-        icon: window.location.origin + '/src/assets/verger-logo.svg',
+        name: "Verdger",
+        icon: window.location.origin + "/src/assets/verger-logo.svg",
       },
-      redirectTo: '/',
+      redirectTo: "/",
       onFinish: () => {
         const userData = userSession.loadUserData();
-        setAddress(userData.profile.stxAddress.testnet)
+        setAddress(userData.profile.stxAddress.testnet);
       },
       userSession,
     });
   }
 
-  
   const handleProductCreation = function () {
     setModal((item) => !item);
   };
@@ -64,15 +64,32 @@ function DashboardMenu() {
             className="w-3/5 px-4 py-6 bg-transparent border-2 outline-none rounded-xl border-primary text-12"
           />
 
-          {!address && <button className="w-1/5 px-4 py-6 font-medium text-white bg-cta rounded-xl text-12" onClick={(e) => {
-            e.preventDefault()
-            handleConnectWallet()
-          }}>Connect Wallet</button>}
+          {!address && (
+            <button
+              className="w-1/5 px-4 py-6 font-medium text-white bg-cta rounded-xl text-12 flex items-center justify-center gap-2"
+              onClick={(e) => {
+                e.preventDefault();
+                handleConnectWallet();
+              }}
+            >
+              <img
+                src={walletIcon}
+                alt="an-icon-for-user"
+                className="w-9 h-9"
+              />
+              <span>Connect Wallet</span>
+            </button>
+          )}
 
-          {address && <button className="flex-1 bg-cta px-4 py-6 text-white rounded-xl text-12 flex items-center justify-center gap-2" onClick={(e) => e.preventDefault()}>
-            <img src={userIcon} alt="an-icon-for-user" className="w-9 h-9" />
-            <span>{address.slice(0, 15) + '....'}</span>
-            </button>}
+          {address && (
+            <button
+              className="flex-1 bg-cta px-4 py-6 text-white rounded-xl text-12 flex items-center justify-center gap-2"
+              onClick={(e) => e.preventDefault()}
+            >
+              <img src={userIcon} alt="an-icon-for-user" className="w-9 h-9" />
+              <span>{address.slice(0, 15) + "...."}</span>
+            </button>
+          )}
 
           <button
             type="submit"
