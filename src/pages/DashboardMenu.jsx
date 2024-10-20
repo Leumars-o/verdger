@@ -69,7 +69,7 @@ function DashboardMenu() {
             handleConnectWallet()
           }}>Connect Wallet</button>}
 
-          {address && <button className="flex-1 bg-cta px-4 py-6 text-white rounded-xl text-12 flex items-center justify-center gap-2">
+          {address && <button className="flex-1 bg-cta px-4 py-6 text-white rounded-xl text-12 flex items-center justify-center gap-2" onClick={(e) => e.preventDefault()}>
             <img src={userIcon} alt="an-icon-for-user" className="w-9 h-9" />
             <span>{address.slice(0, 15) + '....'}</span>
             </button>}
