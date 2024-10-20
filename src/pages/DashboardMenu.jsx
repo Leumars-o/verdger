@@ -8,7 +8,8 @@ import {AppConfig, showConnect, UserSession} from '@stacks/connect'
 
 function DashboardMenu() {
   const [modal, setModal] = useState(false);
-  const [image, setImage] = useState();
+  const [image, setImage] = useState('');
+  const [address, setAddress] = useState();
 
   const appConfig = new AppConfig(['store_write', 'publish_data'])
   const userSession = new UserSession({appConfig})
@@ -16,12 +17,13 @@ function DashboardMenu() {
   function handleConnectWallet() {
     showConnect({
       appDetails: {
-        name: 'My App',
-        icon: window.location.origin + '/my-app-logo.svg',
+        name: 'Verdger',
+        icon: window.location.origin + '/src/assets/verger-logo.svg',
       },
       redirectTo: '/',
       onFinish: () => {
-        let userData = userSession.loadUserData();
+        const userData = userSession.loadUserData();
+        setAddress(userData.profile.stxAddress.testnet)
       },
       userSession,
     });
