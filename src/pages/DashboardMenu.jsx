@@ -3,12 +3,14 @@ import createdIcon from "../assets/created.svg";
 import transferIcon from "../assets/transferred.svg";
 import receiveIcon from "../assets/received.svg";
 import { useState } from "react";
-import connectWallet from "../util/connectWallet";
+// import connectWallet from "../util/connectWallet";
+import {AppConfig, showConnect, UserSession} from '@stacks/connect'
 
 function DashboardMenu() {
   const [modal, setModal] = useState(false);
   const [image, setImage] = useState();
 
+  
   const handleProductCreation = function () {
     setModal((item) => !item);
   };
@@ -42,7 +44,9 @@ function DashboardMenu() {
             placeholder="Type product ID"
             className="w-3/5 px-4 py-6 bg-transparent border-2 outline-none rounded-xl border-primary text-12"
           />
-          <button onClick={connectWallet} className="w-1/5 px-4 py-6 font-medium text-white bg-cta rounded-xl text-12">Connect Wallet</button>
+          <button className="w-1/5 px-4 py-6 font-medium text-white bg-cta rounded-xl text-12" onClick={(e) => {
+            e.preventDefault()
+          }}>Connect Wallet</button>
           <button
             type="submit"
             className="flex-1 px-4 py-6 font-medium text-white bg-cta rounded-xl text-12"
