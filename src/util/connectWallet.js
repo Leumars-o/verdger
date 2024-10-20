@@ -8,7 +8,7 @@ function connectWallet() {
     showConnect({
         appDetails: {
             name: 'Verdger',
-            icon: window.location.origin + '/assets/icon'
+            icon: window.location.origin + '/src/assets/verger-icon.svg'
         },
         onFinish: function() {
             const userData = userSession.loadUserData()
