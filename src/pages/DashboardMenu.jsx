@@ -39,8 +39,9 @@ function DashboardMenu() {
           <input
             type="search"
             placeholder="Type product ID"
-            className="w-4/5 px-4 py-6 bg-transparent border-2 outline-none rounded-xl border-primary text-12"
+            className="w-3/5 px-4 py-6 bg-transparent border-2 outline-none rounded-xl border-primary text-12"
           />
+          <button className="w-1/5 px-4 py-6 font-medium text-white bg-cta rounded-xl text-12">Connect Wallet</button>
           <button
             type="submit"
             className="flex-1 px-4 py-6 font-medium text-white bg-cta rounded-xl text-12"
