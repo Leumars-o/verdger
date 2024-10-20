@@ -10,6 +10,23 @@ function DashboardMenu() {
   const [modal, setModal] = useState(false);
   const [image, setImage] = useState();
 
+  const appConfig = new AppConfig(['store_write', 'publish_data'])
+  const userSession = new UserSession({appConfig})
+
+  function handleConnectWallet() {
+    showConnect({
+      appDetails: {
+        name: 'My App',
+        icon: window.location.origin + '/my-app-logo.svg',
+      },
+      redirectTo: '/',
+      onFinish: () => {
+        let userData = userSession.loadUserData();
+      },
+      userSession,
+    });
+  }
+
   
   const handleProductCreation = function () {
     setModal((item) => !item);
@@ -46,6 +63,7 @@ function DashboardMenu() {
           />
           <button className="w-1/5 px-4 py-6 font-medium text-white bg-cta rounded-xl text-12" onClick={(e) => {
             e.preventDefault()
+            handleConnectWallet()
           }}>Connect Wallet</button>
           <button
             type="submit"
