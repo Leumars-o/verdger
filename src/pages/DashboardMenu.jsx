@@ -6,6 +6,7 @@ import userIcon from "../assets/user-icon.svg";
 import walletIcon from "../assets/wallet.svg";
 import { useState } from "react";
 import { AppConfig, showConnect, UserSession } from "@stacks/connect";
+import { useEffect } from "react";
 
 function DashboardMenu() {
   const [modal, setModal] = useState(false);
@@ -15,6 +16,17 @@ function DashboardMenu() {
   const [address, setAddress] = useState("");
   const [error, setError] = useState("");
 
+  useEffect(
+    function () {
+      if (!error) return;
+
+      const timer = setTimeout(() => setError(""), 3000);
+
+      return () => clearTimeout(timer);
+    },
+    [error]
+  );
+
   const appConfig = new AppConfig(["store_write", "publish_data"]);
   const userSession = new UserSession({ appConfig });
 
@@ -22,7 +34,9 @@ function DashboardMenu() {
     e.preventDefault();
     console.log("available");
 
-    if (!image) return setError("Upload an image for the product");
+    if (!image) {
+      return setError("Upload an image for the product");
+    }
     if (!productName) return setError("Provide the product name");
     if (!description) return setError("Provide a description for your product");
   }
