@@ -10,6 +10,6 @@ export const handleProductUpload = async function (productObj) {
     const doc = await addDoc(collection(db, "products"), productObj);
     return doc.id;
   } catch (error) {
-    return error.message;
+    throw error;
   }
 };

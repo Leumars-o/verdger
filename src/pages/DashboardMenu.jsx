@@ -52,7 +52,7 @@ function DashboardMenu() {
       const productId = await handleProductUpload(productObj);
       console.log(productId);
     } catch (error) {
-      setError(error);
+      setError(error.message);
     }
   }
 
