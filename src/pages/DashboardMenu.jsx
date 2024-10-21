@@ -40,7 +40,7 @@ function DashboardMenu() {
     if (!productName) return setError("Provide the product name");
     if (!description) return setError("Provide a description for your product");
 
-    productObj = {
+    const productObj = {
       productId: crypto.randomUUID(),
       productDescription: description,
       productOwner: address,
@@ -53,6 +53,8 @@ function DashboardMenu() {
       console.log(productId);
     } catch (error) {
       setError(error.message);
+    } finally {
+      setModal(false);
     }
   }
 
