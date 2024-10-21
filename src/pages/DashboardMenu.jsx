@@ -176,7 +176,7 @@ function DashboardMenu() {
 
           <div className="flex items-stretch gap-8 text-12 text-cta">
             <article className="flex flex-col items-center w-1/3 gap-5 px-4 py-4 bg-secondary bg-opacity-20 rounded-3xl">
-              <figure className="w-32 bg-white h-19 rounded-2xl"></figure>
+              <figure className="w-35 bg-white h-19 rounded-2xl"></figure>
 
               <div className="flex items-center justify-between w-full text-13">
                 <h4 className="font-semibold">iPhone 16 Pro Max</h4>
@@ -211,7 +211,7 @@ function DashboardMenu() {
             </article>
 
             <article className="flex flex-col items-center w-1/3 gap-5 px-4 py-4 bg-secondary bg-opacity-20 rounded-3xl">
-              <figure className="w-32 bg-white h-19 rounded-2xl"></figure>
+              <figure className="w-35 bg-white h-19 rounded-2xl"></figure>
 
               <div className="flex items-center justify-between w-full text-13">
                 <h4 className="font-semibold">iPhone 16 Pro Max</h4>
@@ -246,7 +246,7 @@ function DashboardMenu() {
             </article>
 
             <article className="flex flex-col items-center w-1/3 gap-5 px-4 py-4 bg-secondary bg-opacity-20 rounded-3xl">
-              <figure className="w-32 bg-white h-19 rounded-2xl"></figure>
+              <figure className="w-35 bg-white h-19 rounded-2xl"></figure>
 
               <div className="flex items-center justify-between w-full text-13">
                 <h4 className="font-semibold">iPhone 16 Pro Max</h4>
