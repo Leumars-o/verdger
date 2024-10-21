@@ -7,6 +7,7 @@ import walletIcon from "../assets/wallet.svg";
 import { useState } from "react";
 import { AppConfig, showConnect, UserSession } from "@stacks/connect";
 import { useEffect } from "react";
+import { handleProductUpload } from "../firebase/firestone";
 
 function DashboardMenu() {
   const [modal, setModal] = useState(false);
@@ -30,15 +31,29 @@ function DashboardMenu() {
   const appConfig = new AppConfig(["store_write", "publish_data"]);
   const userSession = new UserSession({ appConfig });
 
-  function handleCreateProduct(e) {
+  async function handleCreateProduct(e) {
     e.preventDefault();
-    console.log("available");
 
-    if (!image) {
-      return setError("Upload an image for the product");
-    }
+    // validating data before saving to the database
+    if (!address) return setError("Connect your wallet");
+    if (!image) return setError("Upload an image for the product");
     if (!productName) return setError("Provide the product name");
     if (!description) return setError("Provide a description for your product");
+
+    productObj = {
+      productId: crypto.randomUUID(),
+      productDescription: description,
+      productOwner: address,
+      productImage: image,
+      productName,
+    };
+
+    try {
+      const productId = await handleProductUpload(productObj);
+      console.log(productId);
+    } catch (error) {
+      setError(error);
+    }
   }
 
   function handleConnectWallet() {
@@ -62,7 +77,6 @@ function DashboardMenu() {
 
   const uploadImage = function () {
     document.getElementById("imageUpload").click();
-    console.log(document.getElementById("imageUpload"));
   };
 
   const handleFileChange = function (event) {
@@ -425,7 +439,13 @@ function DashboardMenu() {
               className="w-full h-[35rem] bg-opacity-55 rounded-2xl bg-secondary hover:cursor-pointer"
               onClick={uploadImage}
             >
-              {image && <img src={image} alt="uploaded" />}
+              {image && (
+                <img
+                  src={image}
+                  alt="uploaded"
+                  className="w-full h-full object-cover rounded-2xl"
+                />
+              )}
             </figure>
 
             <input
@@ -450,6 +470,7 @@ function DashboardMenu() {
               type="text"
               id="product-name"
               className="w-full p-4 bg-white rounded-2xl bg-opacity-55 outline-none text-16"
+              onChange={(e) => setProductName(e.target.value)}
             />
 
             {error.includes("product name") && (
@@ -465,6 +486,7 @@ function DashboardMenu() {
             <textarea
               id="description"
               className="w-full h-56 p-4 bg-white rounded-2xl bg-opacity-55 outline-none text-12"
+              onChange={(e) => setDescription(e.target.value)}
             ></textarea>
 
             {error.includes("description") && (
