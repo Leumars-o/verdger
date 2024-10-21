@@ -10,10 +10,22 @@ import { AppConfig, showConnect, UserSession } from "@stacks/connect";
 function DashboardMenu() {
   const [modal, setModal] = useState(false);
   const [image, setImage] = useState("");
-  const [address, setAddress] = useState();
+  const [productName, setProductName] = useState("");
+  const [description, setDescription] = useState("");
+  const [address, setAddress] = useState("");
+  const [error, setError] = useState("");
 
   const appConfig = new AppConfig(["store_write", "publish_data"]);
   const userSession = new UserSession({ appConfig });
+
+  function handleCreateProduct(e) {
+    e.preventDefault();
+    console.log("available");
+
+    if (!image) return setError("Upload an image for the product");
+    if (!productName) return setError("Provide the product name");
+    if (!description) return setError("Provide a description for your product");
+  }
 
   function handleConnectWallet() {
     showConnect({
@@ -392,8 +404,8 @@ function DashboardMenu() {
           <h1 className="text-28 font-semibold">Add Product Item</h1>
 
           <form
-            action=""
             className="w-1/2 flex flex-col items-center gap-3 mt-8"
+            onSubmit={handleCreateProduct}
           >
             <figure
               className="w-full h-[35rem] bg-opacity-55 rounded-2xl bg-secondary hover:cursor-pointer"
@@ -409,6 +421,9 @@ function DashboardMenu() {
               className="hidden"
               onChange={handleFileChange}
             />
+            {error.includes("image") && (
+              <p className="self-start text-red-950 text-13">{error}</p>
+            )}
 
             <label
               htmlFor="product-name"
@@ -423,6 +438,10 @@ function DashboardMenu() {
               className="w-full p-4 bg-white rounded-2xl bg-opacity-55 outline-none text-16"
             />
 
+            {error.includes("product name") && (
+              <p className="self-start text-red-950 text-13">{error}</p>
+            )}
+
             <label
               htmlFor="description"
               className="self-start text-16 font-semibold mt-8 text-cta"
@@ -433,6 +452,10 @@ function DashboardMenu() {
               id="description"
               className="w-full h-56 p-4 bg-white rounded-2xl bg-opacity-55 outline-none text-12"
             ></textarea>
+
+            {error.includes("description") && (
+              <p className="self-start text-red-950 text-13">{error}</p>
+            )}
 
             <button
               type="submit"
