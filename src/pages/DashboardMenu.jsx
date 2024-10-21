@@ -56,7 +56,7 @@ function DashboardMenu() {
 
   return (
     <>
-      <section className="flex flex-col flex-1 gap-8 px-5 py-20 bg-primary bg-opacity-30 overflow-y-auto">
+      <section className="relative flex flex-col flex-1 gap-8 px-5 py-20 bg-primary bg-opacity-30 overflow-y-auto">
         <form action="" className="flex items-center gap-8 mb-16">
           <input
             type="search"
@@ -381,7 +381,7 @@ function DashboardMenu() {
       </section>
 
       {modal && (
-        <section className="absolute flex flex-col items-center w-full h-full p-10 bg-secondary bg-opacity-60 backdrop-blur">
+        <section className="absolute top-0 left-0 flex flex-col items-center w-full min-h-screen p-10 bg-secondary bg-opacity-60 backdrop-blur">
           <button
             className="self-end block text-28 mb-4"
             onClick={handleProductCreation}

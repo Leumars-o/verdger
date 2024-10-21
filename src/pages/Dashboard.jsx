@@ -8,7 +8,7 @@ import doorIcon from "../assets/door-01.svg";
 
 function Dashboard() {
   return (
-    <main className="relative flex h-screen overflow-hidden">
+    <main className="flex h-screen overflow-hidden">
       <aside className="flex flex-col justify-start w-1/5 py-20 pl-20 pr-4 bg-primary">
         <figure className="mb-24">
           <img src={verger} alt="verger logo icon" />
