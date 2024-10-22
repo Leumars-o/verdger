@@ -11,6 +11,7 @@ import { handleGetProduct, handleProductUpload } from "../firebase/firestone";
 
 import { openContractCall } from "@stacks/connect";
 import { uintCV, stringAsciiCV } from "@stacks/transactions";
+import generateRandomId from "../util/generateRandomId";
 
 function DashboardMenu() {
   const [modal, setModal] = useState(false);
@@ -31,24 +32,26 @@ function DashboardMenu() {
     [error]
   );
 
-  useEffect(function () {
-    async function loadCurrentUserData() {
-      try {
-        const results = await handleGetProduct();
-        results.forEach((doc) => console.log(doc.id, "=>", doc.data()));
-      } catch (error) {
-        setError(error.message);
-      }
-    }
+  // useEffect(function () {
+  //   async function loadCurrentUserData() {
+  //     try {
+  //       const results = await handleGetProduct();
+  //       results.forEach((doc) => console.log(doc.id, "=>", doc.data()));
+  //     } catch (error) {
+  //       setError(error.message);
+  //     }
+  //   }
 
-    loadCurrentUserData();
-  }, []);
+  //   loadCurrentUserData();
+  // }, []);
 
   const appConfig = new AppConfig(["store_write", "publish_data"]);
   const userSession = new UserSession({ appConfig });
 
   async function handleCreateProduct(e) {
     e.preventDefault();
+
+    const productId = generateRandomId();
 
     // validating data before saving to the database
     if (!address) return setError("Connect your wallet");
@@ -58,9 +61,9 @@ function DashboardMenu() {
 
     // blockchain function args
     const functionArgs = [
-      uintCV(),
+      uintCV(productId),
       stringAsciiCV(productName),
-      stringAsciiCV(productDescription),
+      stringAsciiCV(description),
     ];
 
     const options = {
@@ -81,8 +84,9 @@ function DashboardMenu() {
 
     await openContractCall(options);
 
+    // creating product
     const productObj = {
-      productId: crypto.randomUUID(),
+      productId: productId,
       productDescription: description,
       productOwner: address,
       productImage: image,
