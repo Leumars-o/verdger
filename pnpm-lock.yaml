@@ -11,6 +11,12 @@ importers:
       '@stacks/connect':
         specifier: ^7.8.0
         version: 7.8.0
+      '@stacks/network':
+        specifier: ^6.17.0
+        version: 6.17.0
+      '@stacks/transactions':
+        specifier: ^6.17.0
+        version: 6.17.0
       firebase:
         specifier: ^10.14.1
         version: 10.14.1
@@ -3076,7 +3082,7 @@ snapshots:
 
   c32check@2.0.0:
     dependencies:
-      '@noble/hashes': 1.1.5
+      '@noble/hashes': 1.5.0
       base-x: 4.0.0
 
   call-bind@1.0.7:

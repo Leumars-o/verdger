@@ -9,6 +9,9 @@ import { useState, useEffect } from "react";
 import { AppConfig, showConnect, UserSession } from "@stacks/connect";
 import { handleGetProduct, handleProductUpload } from "../firebase/firestone";
 
+import { openContractCall } from "@stacks/connect";
+import { uintCV, stringAsciiCV } from "@stacks/transactions";
+
 function DashboardMenu() {
   const [modal, setModal] = useState(false);
   const [image, setImage] = useState("");
@@ -52,6 +55,31 @@ function DashboardMenu() {
     if (!image) return setError("Upload an image for the product");
     if (!productName) return setError("Provide the product name");
     if (!description) return setError("Provide a description for your product");
+
+    // blockchain function args
+    const functionArgs = [
+      uintCV(),
+      stringAsciiCV(productName),
+      stringAsciiCV(productDescription),
+    ];
+
+    const options = {
+      contractAddress: "ST3DRW5EAHRNFXYAW9ZXT1Q6BQ0GXMDEX0ARXDCMA",
+      contractName: "authentify",
+      functionName: "create-product",
+      functionArgs,
+      appDetails: {
+        name: "Verdger",
+        icon: window.location.origin + "/src/assets/verger-logo.svg",
+      },
+      onFinish: function (data) {
+        console.log("Stacks Transaction:", data.stacksTransaction);
+        console.log("Transaction ID:", data.txId);
+        console.log("Raw Transaction:", data.txRaw);
+      },
+    };
+
+    await openContractCall(options);
 
     const productObj = {
       productId: crypto.randomUUID(),
