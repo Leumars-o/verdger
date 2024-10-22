@@ -7,7 +7,7 @@ import walletIcon from "../assets/wallet.svg";
 import { useState } from "react";
 import { AppConfig, showConnect, UserSession } from "@stacks/connect";
 import { useEffect } from "react";
-import { handleProductUpload } from "../firebase/firestone";
+import { handleGetProduct, handleProductUpload } from "../firebase/firestone";
 
 function DashboardMenu() {
   const [modal, setModal] = useState(false);
@@ -27,6 +27,19 @@ function DashboardMenu() {
     },
     [error]
   );
+
+  useEffect(function () {
+    async function loadCurrentUserData() {
+      try {
+        const results = await handleGetProduct();
+        results.forEach((doc) => console.log(doc.id, "=>", doc.data()));
+      } catch (error) {
+        setError(error.message);
+      }
+    }
+
+    loadCurrentUserData();
+  }, []);
 
   const appConfig = new AppConfig(["store_write", "publish_data"]);
   const userSession = new UserSession({ appConfig });
