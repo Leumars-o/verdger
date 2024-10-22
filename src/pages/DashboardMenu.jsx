@@ -49,6 +49,18 @@ function DashboardMenu() {
         try {
           if (!txId) return;
 
+          // creating product
+          const productObj = {
+            blockchainId: txId,
+            txStatus,
+            createdAt: status.time,
+            productId: productId,
+            productDescription: description,
+            productOwner: address,
+            productImage: image,
+            productName,
+          };
+
           const status = await checkTransactionStatus(txId);
 
           if (status.message === "pending") {
@@ -56,25 +68,20 @@ function DashboardMenu() {
           }
 
           if (status.message === "abort_by_response") {
-            return setTxStatus("failed");
-          }
-
-          if (status.message === "success") {
-            // creating product
-            const productObj = {
-              blockchainId: txId,
-              createdAt: status.time,
-              productId: productId,
-              productDescription: description,
-              productOwner: address,
-              productImage: image,
-              productName,
-            };
-
             try {
               const productId = await handleProductUpload(productObj);
 
-              if (productId) setTxStatus("success");
+              if (productId) return setTxStatus("failed");
+            } catch (error) {
+              setError(error.message);
+            }
+          }
+
+          if (status.message === "success") {
+            try {
+              const productId = await handleProductUpload(productObj);
+
+              if (productId) return setTxStatus("success");
             } catch (error) {
               setError(error.message);
             }
@@ -88,19 +95,6 @@ function DashboardMenu() {
     },
     [txId, checkTransactionStatus]
   );
-
-  // useEffect(function () {
-  //   async function loadCurrentUserData() {
-  //     try {
-  //       const results = await handleGetProduct();
-  //       results.forEach((doc) => console.log(doc.id, "=>", doc.data()));
-  //     } catch (error) {
-  //       setError(error.message);
-  //     }
-  //   }
-
-  //   loadCurrentUserData();
-  // }, []);
 
   const appConfig = new AppConfig(["store_write", "publish_data"]);
   const userSession = new UserSession({ appConfig });
