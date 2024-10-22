@@ -253,6 +253,52 @@
     )
 )
 
+;; Define a function to accept a transfer with the correct code
+(define-public (accept-transfer (transfer-id uint) (transfer-code uint)) 
+  (let
+    (
+      (caller tx-sender)
+      (transfer (unwrap! (map-get? transfer-proposals { transfer-id: transfer-id })
+        (err-with-message ERR_INVALID_TRANSFER_ID)))
+      (product (unwrap! (map-get? products { product-id: (get product-id transfer) })
+        (err-with-message ERR_PRODUCT_NOT_FOUND)))
+      (license (unwrap! (map-get? product-licenses { product-id: (get product-id transfer) })
+        (err-with-message ERR_INVALID_PRODUCT_LICENSE)))
+      (block-time (unwrap! (get-block-info? time u0) (err-with-message ERR_INVALID_GET_RESPONSE)))
+    )
+
+    ;; Verify conditions
+    (asserts! (is-eq (get to transfer)) (err-with-message ERR_UNAUTHORIZED))
+    (asserts! (is-transfer-valid?) (err-with-message ERR_TRANSFER_EXPIRED))
+    (asserts! (is-eq transfer-code (get transfer-code transfer)) 
+      (err-with-message ERR_INVALID_TRANSFER_CODE))
+
+    ;; Update product ownership
+    (map-set products
+      { product-id: (get product-id transfer) }
+      (merge product { owner: (some (caller)) })
+    )
+
+    ;; Update product license and ownership history
+    (ok (map-set product-licenses 
+      { product-id: (get product-id transfer) }
+      (merge license
+        {
+          current-owner: caller,
+          ownership-history: (unwrap! 
+            (as-max-len? 
+              (append (get ownership-history license) transfer-id)
+              u200
+            ) 
+            (err-with-message ERR_INVALID_SET_RESPONSE)
+          )
+        }
+      )
+    ))
+  )
+)
+
+
 ;; Define a function to transfer ownership of a licensed product
 (define-public (transfer-ownership (product-id uint) (new-owner principal)) 
     (let
@@ -420,6 +466,23 @@
 )
 
 ;; Helper functon to validate transfer code
+(define-private (valid-transfer-code? (code uint)) 
+  (and
+    (>= code u1000) ;; Code must be at least 4 digits
+    (<= code u9999) ;; Code must be at most 4 digits
+  )
+)
+
+;; Helper function to Check if transfer is still valid (not expired)
+(define-private (is-transfer-valid? (transfer { product-id: uint, from: principal, to: principal, transfer-code: uint, created-at: uint, expires-at: uint, status: (string-ascii 20) }))
+    (let
+        ((current-time (unwrap! (get-block-info? time u0) false)))
+        (and
+            (< current-time (get expires-at transfer))
+            (is-eq (get status transfer) "pending")
+        )
+    )
+)
 
 ;; Modified error response function
 (define-private (err-with-message (error-code uint))
