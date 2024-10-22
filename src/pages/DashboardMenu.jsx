@@ -46,15 +46,15 @@ function DashboardMenu() {
       async function status() {
         try {
           let status = await checkTransactionStatus(txId);
-          if (status === "pending") {
+          if (status.message === "pending") {
             setTimeout(checkTransactionStatus, 3000);
           }
 
-          if (status === "abort_by_response") {
+          if (status.message === "abort_by_response") {
             return setTxStatus("Product creation fail");
           }
 
-          if (status === "success") {
+          if (status.message === "success") {
             // creating product
             const productObj = {
               blockchainId: txId,
