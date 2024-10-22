@@ -4,7 +4,6 @@ import verger from "../assets/verger-logo.svg";
 import dashIcon from "../assets/dash-icon.svg";
 import verifyIcon from "../assets/verify-icon.svg";
 import assetIcon from "../assets/asset-icon.svg";
-import doorIcon from "../assets/door-01.svg";
 
 function Dashboard() {
   return (
