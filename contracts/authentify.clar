@@ -32,6 +32,12 @@
 (define-constant ERR_INVALID_GET_RESPONSE u109)
 (define-constant ERR_INVALID_TRANSFER_ID u110)
 (define-constant ERR_INVALID_SET_RESPONSE u111)
+(define-constant ERR_INVALID_PRODUCT_LICENSE u112)
+(define-constant ERR_INVALID_TRANSFER_CODE u113)
+(define-constant ERR_TRANSFER_EXPIRED u114)
+(define-constant ERR_ALREADY_APPROVED u115)
+(define-constant ERR_INVALID_TRANSFER_STATUS u116)
+(define-constant ERR_TRANSFER_CODE_LENGTH u117)
 
 
 ;; Define dispute codes
@@ -54,18 +60,25 @@
 )
 
 ;; Initialize error messages
-(map-set error-messages ERR_UNAUTHORIZED "ERR_UNAUTHORIZED")
-(map-set error-messages ERR_PRODUCT_EXISTS "ERR_PRODUCT_EXISTS")
-(map-set error-messages ERR_PRODUCT_NOT_FOUND "ERR_PRODUCT_NOT_FOUND")
-(map-set error-messages ERR_INVALID_CREATOR "ERR_INVALID_CREATOR")
-(map-set error-messages ERR_PRODUCT_ALREADY_LICENSED "ERR_PRODUCT_ALREADY_LICENSED")
-(map-set error-messages ERR_INVALID_PRODUCT_ID "ERR_INVALID_PRODUCT_ID")
-(map-set error-messages ERR_INVALID_NAME "ERR_INVALID_NAME")
-(map-set error-messages ERR_INVALID_DESCRIPTION "ERR_INVALID_DESCRIPTION")
-(map-set error-messages ERR_INVALID_DISPUTE_CODE "ERR_INVALID_DISPUTE_CODE")
-(map-set error-messages ERR_INVALID_GET_RESPONSE "ERR_INVALID_GET_RESPONSE")
-(map-set error-messages ERR_INVALID_TRANSFER_ID "ERR_INVALID_TRANSFER_ID")
-(map-set error-messages ERR_INVALID_SET_RESPONSE "ERR_INVALID_SET_RESPONSE")
+(map-set error-messages ERR_UNAUTHORIZED "Unathorized access")
+(map-set error-messages ERR_PRODUCT_EXISTS "Product already exists")
+(map-set error-messages ERR_PRODUCT_NOT_FOUND "Product not found")
+(map-set error-messages ERR_INVALID_CREATOR "Not Eroduct Creator")
+(map-set error-messages ERR_PRODUCT_ALREADY_LICENSED "Product already Licensed")
+(map-set error-messages ERR_INVALID_PRODUCT_ID "Invalid product ID")
+(map-set error-messages ERR_INVALID_NAME "Invalid Name length")
+(map-set error-messages ERR_INVALID_DESCRIPTION "Invalid Description Length")
+(map-set error-messages ERR_INVALID_DISPUTE_CODE "Invalid Dispute Code")
+(map-set error-messages ERR_INVALID_GET_RESPONSE "Get response Error!")
+(map-set error-messages ERR_INVALID_TRANSFER_ID "Invalid Transfer ID")
+(map-set error-messages ERR_INVALID_SET_RESPONSE "Set response error!")
+(map-set error-messages ERR_INVALID_PRODUCT_LICENSE "Invalid product license")
+(map-set error-messages ERR_INVALID_TRANSFER_CODE "Invalid transfer code provided")
+(map-set error-messages ERR_TRANSFER_EXPIRED "Transfer request has expired")
+(map-set error-messages ERR_ALREADY_APPROVED "Transfer already approved")
+(map-set error-messages ERR_INVALID_TRANSFER_STATUS "Invalid transfer status")
+(map-set error-messages ERR_TRANSFER_CODE_LENGTH "Transfer code must be 4 digits")
+
 
 ;; Map to store product information
 (define-map products
@@ -85,8 +98,8 @@
 (define-map product-licenses
   { product-id: uint }
   {
-    initial-owner: principal,
-    license-history: (list 200 uint), ;; list of transfer ID's up to 200 entries
+    creator: principal,
+    ownership-history: (list 200 uint), ;; list of transfer ID's up to 200 entries
     ;;licensed-at: uint,
     current-owner: principal
   }
@@ -103,10 +116,18 @@
     }
 )
 
-;; Define map to keep track of assets
-(define-map user-assets
-    principal
-    (list 1000 uint)
+;; Store transfer proposals with transfer codes
+(define-map transfer-proposals
+    { transfer-id: uint }
+    {
+        product-id: uint,
+        from: principal,
+        to: principal,
+        transfer-code: uint,  ;; 4-digit code
+        created-at: uint,
+        expires-at: uint,
+        status: (string-ascii 20)  ;; "pending", "approved", "expired", "completed" "cancelled"
+    }
 )
 
 ;; public functions
@@ -190,12 +211,46 @@
     (ok (map-set product-licenses
       { product-id: product-id }
       {
-        initial-owner: caller,
-        license-history: (list transfer-id),
+        creator: caller,
+        ownership-history: (list transfer-id),
         current-owner: buyer
       }
     ))
   )
+)
+
+;; Define a function to Initiate a transfer with a 4-digit code
+(define-public (initiate-transfer (product-id uint) (new-owner principal) (transfer-code uint))
+    (let
+        (
+            (caller tx-sender)
+            (product (unwrap! (map-get? products { product-id: product-id }) (err-with-message ERR_PRODUCT_NOT_FOUND)))
+            (license (unwrap! (map-get? product-licenses { product-id: product-id }) (err-with-message ERR_INVALID_PRODUCT_LICENSE)))
+            (block-time (unwrap! (get-block-info? time u0) (err-with-message ERR_INVALID_GET_RESPONSE)))
+            (transfer-id (generate-transfer-id))
+        )
+        
+        ;; Verify conditions
+        (asserts! (valid-product-id? product-id) (err-with-message ERR_INVALID_PRODUCT_ID))
+        (asserts! (get is-licensed product) (err-with-message ERR_PRODUCT_ALREADY_LICENSED))
+        (asserts! (is-eq (get current-owner license) caller) (err-with-message ERR_UNAUTHORIZED))
+        (asserts! (not (is-eq new-owner caller)) (err-with-message ERR_UNAUTHORIZED))
+        (asserts! (valid-transfer-code? transfer-code) (err-with-message ERR_TRANSFER_CODE_LENGTH))
+
+        ;; Create transfer proposal
+        (ok (map-set transfer-proposals
+            { transfer-id: transfer-id }
+            {
+                product-id: product-id,
+                from: caller,
+                to: new-owner,
+                transfer-code: transfer-code,
+                created-at: block-time,
+                expires-at: (+ block-time u86400), ;; Expires in 24 hours
+                status: "pending"
+            }
+        ))
+    )
 )
 
 ;; Define a function to transfer ownership of a licensed product
@@ -203,7 +258,7 @@
     (let
         (
             (product (unwrap! (map-get? products { product-id: product-id }) (err-with-message ERR_PRODUCT_NOT_FOUND)))
-            (license (unwrap! (map-get? product-licenses { product-id: product-id }) (err-with-message ERR_INVALID_GET_RESPONSE)))
+            (license (unwrap! (map-get? product-licenses { product-id: product-id }) (err-with-message ERR_INVALID_PRODUCT_LICENSE)))
             (caller tx-sender)
             (block-time (unwrap! (get-block-info? time u0) (err-with-message ERR_INVALID_GET_RESPONSE)))
             (transfer-id (generate-transfer-id))
@@ -253,9 +308,9 @@
             (merge license
                 {
                     current-owner: new-owner,
-                    license-history: (unwrap! 
+                    ownership-history: (unwrap! 
                         (as-max-len? 
-                            (append (get license-history license) transfer-id)
+                            (append (get ownership-history license) transfer-id)
                             u200
                         ) 
                         (err-with-message ERR_INVALID_SET_RESPONSE)
@@ -293,20 +348,24 @@
 
 ;; Define function to get product license details
 (define-read-only (get-license-details (product-id uint)) 
-    (map-get? product-licenses { product-id: product-id })
+  (match (map-get? product-licenses { product-id: product-id })
+    value (ok value)
+    (err-with-message ERR_INVALID_PRODUCT_LICENSE)
+  )
 )
 
 ;; Define a function to get transfer details
 (define-read-only (get-transfer-details (transfer-id uint))
-    (map-get? ownership-transfers { transfer-id: transfer-id })
+  (map-get? ownership-transfers { transfer-id: transfer-id })
 )
 
 ;; Define a function to get all transfers for a product
-(define-read-only (get-all-transfers (product-id uint))
-    (match (map-get? product-licenses { product-id: product-id })
-        license (map get-transfer-details (get license-history license))
-        (list)
-    )
+(define-read-only (get-ownership-history (product-id uint))
+  (match (map-get? product-licenses { product-id: product-id })
+    license (map get-transfer-details (get ownership-history license))
+    (list)
+    
+  )
 )
 
 ;; private functions
@@ -359,6 +418,8 @@
 (define-private (get-error-message (error-code uint))
   (default-to "UNKNOWN_ERROR" (map-get? error-messages error-code))
 )
+
+;; Helper functon to validate transfer code
 
 ;; Modified error response function
 (define-private (err-with-message (error-code uint))
