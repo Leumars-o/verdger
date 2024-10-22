@@ -34,6 +34,8 @@ function DashboardMenu() {
     function () {
       if (!error) return;
 
+      if (error.includes("wallet")) alert("Connect Wallet");
+
       const timer = setTimeout(() => setError(""), 3000);
 
       return () => clearTimeout(timer);
@@ -45,19 +47,25 @@ function DashboardMenu() {
     function () {
       async function status() {
         try {
-          let status = await checkTransactionStatus(txId);
+          if (!txId) return;
+          const status = await checkTransactionStatus(txId);
           if (status.message === "pending") {
+            console.log("Pending");
             setTimeout(checkTransactionStatus, 3000);
           }
 
           if (status.message === "abort_by_response") {
-            return setTxStatus("Product creation fail");
+            console.log("Abort");
+            return setTxStatus("failed");
           }
 
           if (status.message === "success") {
+            console.log("Success");
+
             // creating product
             const productObj = {
               blockchainId: txId,
+              createdAt: status.time,
               productId: productId,
               productDescription: description,
               productOwner: address,
@@ -68,7 +76,7 @@ function DashboardMenu() {
             try {
               const productId = await handleProductUpload(productObj);
 
-              if (productId) setTxStatus("Product Created");
+              if (productId) setTxStatus("success");
             } catch (error) {
               setError(error.message);
             }
@@ -80,7 +88,7 @@ function DashboardMenu() {
 
       status();
     },
-    [txId]
+    [txId, checkTransactionStatus]
   );
 
   // useEffect(function () {
@@ -419,77 +427,20 @@ function DashboardMenu() {
             </li>
 
             <li className="grid items-center grid-cols-10 gap-4 px-10 py-6 bg-white">
-              <figure className="col-span-1 h-36 bg-primary rounded-xl"></figure>
+              <figure className="col-span-1 h-36 bg-primary rounded-xl">
+                <img src={image} alt="" className="w-full h-full rounded-xl" />
+              </figure>
 
               <span className="col-span-3 col-start-2">
-                <h5 className="mb-2 font-semibold">iPhone 16 Pro Max</h5>
-                <p>Blockchain ID: 0xA79BF12009F8E4C1A4F2</p>
-                <p>Registered by: 0xA12B34CD5678EF901 (you)</p>
+                <h5 className="mb-2 font-semibold">{productName}</h5>
+                <p>Blockchain ID: {txId}</p>
               </span>
               <span className="col-start-6">11/10/2024</span>
 
               <button className="col-start-10 px-6 py-2 text-left bg-opacity-50 border-2 rounded-full bg-primary">
-                Created
-              </button>
-            </li>
-
-            <li className="grid items-center grid-cols-10 gap-4 px-10 py-6 bg-white">
-              <figure className="col-span-1 h-36 bg-primary rounded-xl"></figure>
-
-              <span className="col-span-3 col-start-2">
-                <h5 className="mb-2 font-semibold">iPhone 16 Pro Max</h5>
-                <p>Blockchain ID: 0xA79BF12009F8E4C1A4F2</p>
-                <p>Registered by: 0xA12B34CD5678EF901 (you)</p>
-              </span>
-              <span className="col-start-6">11/10/2024</span>
-
-              <button className="col-start-10 px-6 py-2 text-left bg-opacity-50 border-2 rounded-full bg-primary">
-                Created
-              </button>
-            </li>
-
-            <li className="grid items-center grid-cols-10 gap-4 px-10 py-6 bg-white">
-              <figure className="col-span-1 h-36 bg-primary rounded-xl"></figure>
-
-              <span className="col-span-3 col-start-2">
-                <h5 className="mb-2 font-semibold">iPhone 16 Pro Max</h5>
-                <p>Blockchain ID: 0xA79BF12009F8E4C1A4F2</p>
-                <p>Registered by: 0xA12B34CD5678EF901 (you)</p>
-              </span>
-              <span className="col-start-6">11/10/2024</span>
-
-              <button className="col-start-10 px-6 py-2 text-left bg-opacity-50 border-2 rounded-full bg-primary">
-                Created
-              </button>
-            </li>
-
-            <li className="grid items-center grid-cols-10 gap-4 px-10 py-6 bg-white">
-              <figure className="col-span-1 h-36 bg-primary rounded-xl"></figure>
-
-              <span className="col-span-3 col-start-2">
-                <h5 className="mb-2 font-semibold">iPhone 16 Pro Max</h5>
-                <p>Blockchain ID: 0xA79BF12009F8E4C1A4F2</p>
-                <p>Registered by: 0xA12B34CD5678EF901 (you)</p>
-              </span>
-              <span className="col-start-6">11/10/2024</span>
-
-              <button className="col-start-10 px-6 py-2 text-left bg-opacity-50 border-2 rounded-full bg-primary">
-                Created
-              </button>
-            </li>
-
-            <li className="grid items-center grid-cols-10 gap-4 px-10 py-6 bg-white rounded-b-2xl">
-              <figure className="col-span-1 h-36 bg-primary rounded-xl"></figure>
-
-              <span className="col-span-3 col-start-2">
-                <h5 className="mb-2 font-semibold">iPhone 16 Pro Max</h5>
-                <p>Blockchain ID: 0xA79BF12009F8E4C1A4F2</p>
-                <p>Registered by: 0xA12B34CD5678EF901 (you)</p>
-              </span>
-              <span className="col-start-6">11/10/2024</span>
-
-              <button className="col-start-10 px-6 py-2 text-left bg-opacity-50 border-2 rounded-full bg-primary">
-                Created
+                {txStatus === "pending" && "pending"}
+                {txStatus === "success" && "Product is created"}
+                {txStatus === "failed" && "Product fail to create"}
               </button>
             </li>
           </ul>
