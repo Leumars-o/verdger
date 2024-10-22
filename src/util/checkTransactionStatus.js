@@ -10,3 +10,5 @@ async function checkTransactionStatus({ txId }) {
     throw error;
   }
 }
+
+export default checkTransactionStatus;
