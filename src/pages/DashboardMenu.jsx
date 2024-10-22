@@ -4,9 +4,9 @@ import transferIcon from "../assets/transferred.svg";
 import receiveIcon from "../assets/received.svg";
 import userIcon from "../assets/user-icon.svg";
 import walletIcon from "../assets/wallet.svg";
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
 import { AppConfig, showConnect, UserSession } from "@stacks/connect";
-import { useEffect } from "react";
 import { handleGetProduct, handleProductUpload } from "../firebase/firestone";
 
 function DashboardMenu() {
