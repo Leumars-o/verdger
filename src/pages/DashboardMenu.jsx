@@ -13,6 +13,7 @@ import { openContractCall } from "@stacks/connect";
 import { uintCV, stringAsciiCV } from "@stacks/transactions";
 import generateRandomId from "../util/generateRandomId";
 import { StacksTestnet } from "@stacks/network";
+import checkTransactionStatus from "../util/checkTransactionStatus";
 
 function DashboardMenu() {
   const [image, setImage] = useState(function () {
@@ -24,8 +25,10 @@ function DashboardMenu() {
 
   const [modal, setModal] = useState(false);
   const [error, setError] = useState("");
+  const [txError, setTxError] = useState("");
 
   const [txId, setTxId] = useState("");
+  const [txStatus, setTxStatus] = useState("pending");
 
   useEffect(
     function () {
@@ -36,6 +39,48 @@ function DashboardMenu() {
       return () => clearTimeout(timer);
     },
     [error]
+  );
+
+  useEffect(
+    function () {
+      async function status() {
+        try {
+          let status = await checkTransactionStatus(txId);
+          if (status === "pending") {
+            setTimeout(checkTransactionStatus, 3000);
+          }
+
+          if (status === "abort_by_response") {
+            return setTxStatus("Product creation fail");
+          }
+
+          if (status === "success") {
+            // creating product
+            const productObj = {
+              blockchainId: txId,
+              productId: productId,
+              productDescription: description,
+              productOwner: address,
+              productImage: image,
+              productName,
+            };
+
+            try {
+              const productId = await handleProductUpload(productObj);
+
+              if (productId) setTxStatus("Product Created");
+            } catch (error) {
+              setError(error.message);
+            }
+          }
+        } catch (error) {
+          setTxError(error.message);
+        }
+      }
+
+      status();
+    },
+    [txId]
   );
 
   // useEffect(function () {
@@ -89,22 +134,6 @@ function DashboardMenu() {
 
     await openContractCall(options);
     setModal(false);
-
-    // creating product
-    // const productObj = {
-    //   productId: productId,
-    //   productDescription: description,
-    //   productOwner: address,
-    //   productImage: image,
-    //   productName,
-    // };
-
-    // try {
-    //   const productId = await handleProductUpload(productObj);
-    //   console.log(productId);
-    // } catch (error) {
-    //   setError(error.message);
-    // }
   }
 
   function handleConnectWallet() {
