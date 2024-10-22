@@ -22,6 +22,8 @@ export const handleGetProduct = async function () {
       throw new Error(
         "There is a problem with your internet or data doesn't exist"
       );
+
+    return query;
   } catch (error) {
     throw error;
   }
