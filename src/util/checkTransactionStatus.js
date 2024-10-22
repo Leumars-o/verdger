@@ -5,7 +5,7 @@ async function checkTransactionStatus({ txId }) {
     );
     const data = await res.json();
 
-    return data.tx_status;
+    return { success: data.tx_status, time: data.block_time_iso };
   } catch (error) {
     throw error;
   }
