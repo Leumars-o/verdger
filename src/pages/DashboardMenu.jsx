@@ -12,14 +12,20 @@ import { handleGetProduct, handleProductUpload } from "../firebase/firestone";
 import { openContractCall } from "@stacks/connect";
 import { uintCV, stringAsciiCV } from "@stacks/transactions";
 import generateRandomId from "../util/generateRandomId";
+import { StacksTestnet } from "@stacks/network";
 
 function DashboardMenu() {
-  const [modal, setModal] = useState(false);
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState(function () {
+    return sessionStorage.productImage || "";
+  });
+  const [address, setAddress] = useState("");
   const [productName, setProductName] = useState("");
   const [description, setDescription] = useState("");
-  const [address, setAddress] = useState("");
+
+  const [modal, setModal] = useState(false);
   const [error, setError] = useState("");
+
+  const [txId, setTxId] = useState("");
 
   useEffect(
     function () {
@@ -67,6 +73,7 @@ function DashboardMenu() {
     ];
 
     const options = {
+      network: new StacksTestnet(),
       contractAddress: "ST3DRW5EAHRNFXYAW9ZXT1Q6BQ0GXMDEX0ARXDCMA",
       contractName: "authentify",
       functionName: "create-product",
@@ -76,31 +83,28 @@ function DashboardMenu() {
         icon: window.location.origin + "/src/assets/verger-logo.svg",
       },
       onFinish: function (data) {
-        console.log("Stacks Transaction:", data.stacksTransaction);
-        console.log("Transaction ID:", data.txId);
-        console.log("Raw Transaction:", data.txRaw);
+        setTxId(data.txId);
       },
     };
 
     await openContractCall(options);
+    setModal(false);
 
     // creating product
-    const productObj = {
-      productId: productId,
-      productDescription: description,
-      productOwner: address,
-      productImage: image,
-      productName,
-    };
+    // const productObj = {
+    //   productId: productId,
+    //   productDescription: description,
+    //   productOwner: address,
+    //   productImage: image,
+    //   productName,
+    // };
 
-    try {
-      const productId = await handleProductUpload(productObj);
-      console.log(productId);
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setModal(false);
-    }
+    // try {
+    //   const productId = await handleProductUpload(productObj);
+    //   console.log(productId);
+    // } catch (error) {
+    //   setError(error.message);
+    // }
   }
 
   function handleConnectWallet() {
@@ -135,6 +139,7 @@ function DashboardMenu() {
       reader.onload = function (e) {
         console.log(e.target.result);
         setImage(e.target.result);
+        sessionStorage.setItem("productImage", e.target.result);
       };
 
       reader.readAsDataURL(file);
