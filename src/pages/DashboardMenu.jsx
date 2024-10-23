@@ -64,29 +64,24 @@ function DashboardMenu() {
           const status = await checkTransactionStatus(txId);
 
           if (status.message === "pending") {
-            setTimeout(checkTransactionStatus, 3000);
+            setError("");
+            return setTimeout(status, 3000);
           }
 
-          if (status.message === "abort_by_response") {
-            try {
-              const productId = await handleProductUpload(productObj);
+          if (status.message === "abort_by_response") setTxStatus("failed");
 
-              if (productId) return setTxStatus("failed");
-            } catch (error) {
-              setError(error.message);
-            }
-          }
+          if (status.message === "success") setTxStatus("success");
 
-          if (status.message === "success") {
-            try {
-              const productId = await handleProductUpload(productObj);
-
-              if (productId) return setTxStatus("success");
-            } catch (error) {
-              setError(error.message);
-            }
+          try {
+            setError("");
+            const productId = await handleProductUpload(productObj);
+            console.log(productId);
+          } catch (error) {
+            console.log(error);
+            setError(error.message);
           }
         } catch (error) {
+          console.log(error);
           setTxError(error.message);
         }
       }
