@@ -29,7 +29,6 @@ function DashboardMenu() {
   const {
     txId,
     status,
-    blockTime,
     error: txError,
     trackTransaction,
   } = useTransactionStatus();
@@ -46,20 +45,6 @@ function DashboardMenu() {
     },
     [error]
   );
-
-  // useEffect(function () {
-  //   async function storeInFirebase() {
-  //     const productObj = {
-  //       productDes: description,
-  //       productOwner: address,
-  //       productImage: image,
-  //       blockchainId: txId,
-  //       productName,
-  //     };
-  //   }
-
-  //   storeInFirebase();
-  // }, []);
 
   const appConfig = new AppConfig(["store_write", "publish_data"]);
   const userSession = new UserSession({ appConfig });
@@ -354,7 +339,7 @@ function DashboardMenu() {
                   <p>Blockchain ID: {`${txId?.slice(0, 25)}....`}</p>
                 </span>
                 <span className="col-start-6">
-                  {new Date(blockTime).toLocaleDateString()}
+                  {/* {new Date(blockTime).toLocaleDateString()} */}
                 </span>
 
                 <button className="col-start-10 px-6 py-2 text-left bg-opacity-50 border-2 rounded-full bg-primary">
