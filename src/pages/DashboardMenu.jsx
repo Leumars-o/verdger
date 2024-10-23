@@ -136,6 +136,10 @@ function DashboardMenu() {
       onFinish: () => {
         const userData = userSession.loadUserData();
         setAddress(userData.profile.stxAddress.testnet);
+        sessionStorage.setItem(
+          "productOwner",
+          userData.profile.stxAddress.testnet
+        );
       },
       userSession,
     });
