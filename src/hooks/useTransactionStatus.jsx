@@ -3,7 +3,6 @@ import { useState, useEffect, useCallback, useRef } from "react";
 export function useTransactionStatus(initialTxId = null) {
   const [txId, setTxId] = useState(initialTxId);
   const [status, setStatus] = useState("pending");
-  const [blockTime, setBlockTime] = useState(null);
   const [error, setError] = useState(null);
   const [isPolling, setIsPolling] = useState(false);
 
@@ -21,7 +20,6 @@ export function useTransactionStatus(initialTxId = null) {
       const data = await res.json();
       return {
         status: data.tx_status,
-        time: data.block_time_iso,
       };
     } catch (err) {
       console.error("Error checking transaction status:", err);
@@ -39,7 +37,6 @@ export function useTransactionStatus(initialTxId = null) {
         // Only update state if we're still polling the same transaction
         if (currentTxId === txId) {
           setStatus(result.status);
-          setBlockTime(result.time);
 
           if (result.status === "pending" && isPollingRef.current) {
             pollingTimeoutRef.current = setTimeout(() => {
@@ -102,14 +99,12 @@ export function useTransactionStatus(initialTxId = null) {
 
     setTxId(newTxId);
     setStatus("pending");
-    setBlockTime(null);
     setError(null);
   }, []);
 
   return {
     txId,
     status,
-    blockTime,
     error,
     isPolling,
     trackTransaction,
