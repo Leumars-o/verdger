@@ -21,6 +21,7 @@ function DashboardMenu() {
   const [address, setAddress] = useState("");
   const [productName, setProductName] = useState("");
   const [description, setDescription] = useState("");
+  const [pId, setPID] = useState();
 
   const [modal, setModal] = useState(false);
   const [error, setError] = useState("");
@@ -92,18 +93,27 @@ function DashboardMenu() {
         icon: window.location.origin + "/src/assets/verger-logo.svg",
       },
       onFinish: async function (data) {
-        trackTransaction(data.txId);
+        try {
+          trackTransaction(data.txId);
 
-        const productObj = {
-          productId,
-          productName,
-          productImage: image,
-          productOwner: address,
-          prodcutDes: description,
-          blockchainId: data.txId,
-        };
+          const productObj = {
+            productId,
+            productName,
+            productImage: image,
+            productOwner: address,
+            productDes: description, // Fixed typo
+            blockchainId: data.txId,
+            createdAt: new Date().toISOString(),
+          };
 
-        const productId = await handleProductUpload(productObj);
+          const uploadedProductId = await handleProductUpload(productObj);
+          setPID(uploadedProductId);
+
+          // Optional: Add success notification
+          alert("Product created successfully!");
+        } catch (error) {
+          console.error("Firebase upload error:", error);
+        }
       },
     };
 
