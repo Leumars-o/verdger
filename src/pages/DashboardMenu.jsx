@@ -8,7 +8,10 @@ import walletIcon from "../assets/wallet.svg";
 
 import { useState, useEffect } from "react";
 import { AppConfig, showConnect, UserSession } from "@stacks/connect";
-import { handleProductUpload } from "../firebase/firestone";
+import {
+  handleProductUpload,
+  handleUpdateProduct,
+} from "../firebase/firestone";
 
 import { openContractCall } from "@stacks/connect";
 import { uintCV, stringAsciiCV } from "@stacks/transactions";
@@ -44,6 +47,23 @@ function DashboardMenu() {
       return () => clearTimeout(timer);
     },
     [error]
+  );
+
+  useEffect(
+    function () {
+      async function updateProduct() {
+        if (!pId && !status) return;
+
+        try {
+          await handleUpdateProduct(pId, { status });
+        } catch (error) {
+          console.log(error.message);
+        }
+      }
+
+      updateProduct();
+    },
+    [pId, status]
   );
 
   const appConfig = new AppConfig(["store_write", "publish_data"]);
