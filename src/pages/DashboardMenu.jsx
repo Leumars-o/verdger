@@ -24,7 +24,7 @@ function DashboardMenu() {
   const [address, setAddress] = useState("");
   const [productName, setProductName] = useState("");
   const [description, setDescription] = useState("");
-  const [pId, setPID] = useState();
+  const [pId, setPID] = useState(0);
 
   const [modal, setModal] = useState(false);
   const [error, setError] = useState("");
@@ -52,10 +52,10 @@ function DashboardMenu() {
   useEffect(
     function () {
       async function updateProduct() {
-        if (!pId && !status) return;
+        if (!pId && status === "pending") return;
 
         try {
-          await handleUpdateProduct(pId, { status });
+          await handleUpdateProduct(pId, { status: status });
         } catch (error) {
           console.log(error.message);
         }
