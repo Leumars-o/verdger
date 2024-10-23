@@ -101,7 +101,7 @@ function DashboardMenu() {
             productName,
             productImage: image,
             productOwner: address,
-            productDes: description, // Fixed typo
+            productDes: description,
             blockchainId: data.txId,
             createdAt: new Date().toISOString(),
           };
@@ -112,7 +112,7 @@ function DashboardMenu() {
           // Optional: Add success notification
           alert("Product created successfully!");
         } catch (error) {
-          console.error("Firebase upload error:", error);
+          setError("Firebase upload error:", error.message);
         }
       },
     };
