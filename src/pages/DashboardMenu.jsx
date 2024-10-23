@@ -135,6 +135,13 @@ function DashboardMenu() {
             className="w-3/5 px-4 py-6 bg-transparent border-2 outline-none rounded-xl border-primary text-12"
           />
 
+          <button
+            type="submit"
+            className="flex-1 px-4 py-6 font-medium text-white bg-cta rounded-xl text-12"
+          >
+            Check
+          </button>
+
           {!address && (
             <button
               className="w-1/5 px-4 py-6 font-medium text-white bg-cta rounded-xl text-12 flex items-center justify-center gap-2"
@@ -161,13 +168,6 @@ function DashboardMenu() {
               <span>{address.slice(0, 15) + "...."}</span>
             </button>
           )}
-
-          <button
-            type="submit"
-            className="flex-1 px-4 py-6 font-medium text-white bg-cta rounded-xl text-12"
-          >
-            Check
-          </button>
         </form>
 
         <ul className="flex items-center gap-8">
