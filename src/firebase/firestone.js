@@ -4,7 +4,9 @@ import {
   doc,
   getDocs,
   getFirestore,
+  query,
   updateDoc,
+  where,
 } from "firebase/firestore";
 import { app } from "./config";
 
@@ -28,12 +30,16 @@ export const handleUpdateProduct = async function (productId, updateValueObj) {
 };
 
 //function for getting data from firestore
-export const handleGetProduct = async function () {
-  const query = await getDocs(collection(db, "products"));
-  if (!query)
+export const handleGetProduct = async function (ownerAddress) {
+  const firebaseQuery = query(
+    collection(db, "products"),
+    where("productOwner", "==", ownerAddress)
+  );
+  const getData = await getDocs(firebaseQuery);
+  if (!getData)
     throw new Error(
       "There is a problem with your internet or data doesn't exist"
     );
 
-  return query;
+  return getData;
 };
