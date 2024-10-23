@@ -8,7 +8,7 @@ import walletIcon from "../assets/wallet.svg";
 
 import { useState, useEffect } from "react";
 import { AppConfig, showConnect, UserSession } from "@stacks/connect";
-// import { handleProductUpload } from "../firebase/firestone";
+import { handleProductUpload } from "../firebase/firestone";
 
 import { openContractCall } from "@stacks/connect";
 import { uintCV, stringAsciiCV } from "@stacks/transactions";
@@ -46,6 +46,20 @@ function DashboardMenu() {
     [error]
   );
 
+  // useEffect(function () {
+  //   async function storeInFirebase() {
+  //     const productObj = {
+  //       productDes: description,
+  //       productOwner: address,
+  //       productImage: image,
+  //       blockchainId: txId,
+  //       productName,
+  //     };
+  //   }
+
+  //   storeInFirebase();
+  // }, []);
+
   const appConfig = new AppConfig(["store_write", "publish_data"]);
   const userSession = new UserSession({ appConfig });
 
@@ -77,8 +91,19 @@ function DashboardMenu() {
         name: "Verdger",
         icon: window.location.origin + "/src/assets/verger-logo.svg",
       },
-      onFinish: function (data) {
+      onFinish: async function (data) {
         trackTransaction(data.txId);
+
+        const productObj = {
+          productId,
+          productName,
+          productImage: image,
+          productOwner: address,
+          prodcutDes: description,
+          blockchainId: data.txId,
+        };
+
+        const productId = await handleProductUpload(productObj);
       },
     };
 
