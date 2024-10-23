@@ -21,7 +21,7 @@ import { useTransactionStatus } from "../hooks/useTransactionStatus";
 
 function DashboardMenu() {
   const [image, setImage] = useState(sessionStorage.productImage || "");
-  const [address, setAddress] = useState("");
+  const [address, setAddress] = useState(sessionStorage.productOwner || "");
   const [productName, setProductName] = useState("");
   const [description, setDescription] = useState("");
   const [pId, setPID] = useState(0);
