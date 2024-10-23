@@ -1,3 +1,4 @@
+import React from "react";
 import itemsIcon from "../assets/items-icon.svg";
 import createdIcon from "../assets/created.svg";
 import transferIcon from "../assets/transferred.svg";
@@ -7,28 +8,30 @@ import walletIcon from "../assets/wallet.svg";
 
 import { useState, useEffect } from "react";
 import { AppConfig, showConnect, UserSession } from "@stacks/connect";
-import { handleGetProduct, handleProductUpload } from "../firebase/firestone";
+// import { handleProductUpload } from "../firebase/firestone";
 
 import { openContractCall } from "@stacks/connect";
 import { uintCV, stringAsciiCV } from "@stacks/transactions";
 import generateRandomId from "../util/generateRandomId";
 import { StacksTestnet } from "@stacks/network";
-import checkTransactionStatus from "../util/checkTransactionStatus";
+import { useTransactionStatus } from "../hooks/useTransactionStatus";
 
 function DashboardMenu() {
-  const [image, setImage] = useState(function () {
-    return sessionStorage.productImage || "";
-  });
+  const [image, setImage] = useState(sessionStorage.productImage || "");
   const [address, setAddress] = useState("");
   const [productName, setProductName] = useState("");
   const [description, setDescription] = useState("");
 
   const [modal, setModal] = useState(false);
   const [error, setError] = useState("");
-  const [txError, setTxError] = useState("");
 
-  const [txId, setTxId] = useState("");
-  const [txStatus, setTxStatus] = useState("pending");
+  const {
+    txId,
+    status,
+    blockTime,
+    error: txError,
+    trackTransaction,
+  } = useTransactionStatus();
 
   useEffect(
     function () {
@@ -41,54 +44,6 @@ function DashboardMenu() {
       return () => clearTimeout(timer);
     },
     [error]
-  );
-
-  useEffect(
-    function () {
-      async function status() {
-        try {
-          if (!txId) return;
-
-          // creating product
-          const productObj = {
-            blockchainId: txId,
-            txStatus,
-            createdAt: status.time,
-            productId: productId,
-            productDescription: description,
-            productOwner: address,
-            productImage: image,
-            productName,
-          };
-
-          const status = await checkTransactionStatus(txId);
-
-          if (status.message === "pending") {
-            setError("");
-            return setTimeout(status, 3000);
-          }
-
-          if (status.message === "abort_by_response") setTxStatus("failed");
-
-          if (status.message === "success") setTxStatus("success");
-
-          try {
-            setError("");
-            const productId = await handleProductUpload(productObj);
-            console.log(productId);
-          } catch (error) {
-            console.log(error);
-            setError(error.message);
-          }
-        } catch (error) {
-          console.log(error);
-          setTxError(error.message);
-        }
-      }
-
-      status();
-    },
-    [txId, checkTransactionStatus]
   );
 
   const appConfig = new AppConfig(["store_write", "publish_data"]);
@@ -123,7 +78,7 @@ function DashboardMenu() {
         icon: window.location.origin + "/src/assets/verger-logo.svg",
       },
       onFinish: function (data) {
-        setTxId(data.txId);
+        trackTransaction(data.txId);
       },
     };
 
@@ -406,36 +361,53 @@ function DashboardMenu() {
         <div>
           <h2 className="mb-8 font-semibold text-28">Recent activities</h2>
 
-          <ul className="rounded-2xl bg-primary text-13">
+          <ul className="rounded-2xl bg-primary text-13 flex flex-col">
             <li className="grid grid-cols-10 gap-4 px-10 py-6">
               <span className="col-span-1">Item Detail</span>
               <span className="col-start-6">Date</span>
               <span className="col-start-10">Activity</span>
             </li>
 
-            <li className="grid items-center grid-cols-10 gap-4 px-10 py-6 bg-white">
-              <figure className="col-span-1 h-36 bg-primary rounded-xl">
-                <img src={image} alt="" className="w-full h-full rounded-xl" />
-              </figure>
+            {!txId && (
+              <p className="bg-white text-center py-8">
+                There is no Recent Item
+              </p>
+            )}
 
-              <span className="col-span-3 col-start-2">
-                <h5 className="mb-2 font-semibold">{productName}</h5>
-                <p>Blockchain ID: {txId}</p>
-              </span>
-              <span className="col-start-6">11/10/2024</span>
+            {txId && (
+              <li className="grid items-center grid-cols-10 gap-4 px-10 py-6 bg-white">
+                <figure className="col-span-1 h-36 bg-primary rounded-xl">
+                  <img
+                    src={image}
+                    alt=""
+                    className="w-full h-full rounded-xl"
+                  />
+                </figure>
 
-              <button className="col-start-10 px-6 py-2 text-left bg-opacity-50 border-2 rounded-full bg-primary">
-                {txStatus === "pending" && "pending"}
-                {txStatus === "success" && "Product is created"}
-                {txStatus === "failed" && "Product fail to create"}
-              </button>
-            </li>
+                <span className="col-span-3 col-start-2">
+                  <h5 className="mb-2 font-semibold">{productName}</h5>
+                  <p>Blockchain ID: {`${txId?.slice(0, 25)}....`}</p>
+                </span>
+                <span className="col-start-6">
+                  {new Date(blockTime).toLocaleDateString()}
+                </span>
+
+                <button className="col-start-10 px-6 py-2 text-left bg-opacity-50 border-2 rounded-full bg-primary">
+                  {status === "pending" && "pending"}
+                  {status === "abort_by_response" && "aborted"}
+                  {status === "success" && "success"}
+                  {txError && (
+                    <span className="status-error">Error: {txError}</span>
+                  )}
+                </button>
+              </li>
+            )}
           </ul>
 
-          <button className="px-12 py-3 mt-6 text-white rounded-full text-13 bg-cta">
+          {/* <button className="px-12 py-3 mt-6 text-white rounded-full text-13 bg-cta">
             View All Items {">"}
             {">"}
-          </button>
+          </button> */}
         </div>
       </section>
 
