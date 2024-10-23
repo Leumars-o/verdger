@@ -9,6 +9,7 @@ import walletIcon from "../assets/wallet.svg";
 import { useState, useEffect } from "react";
 import { AppConfig, showConnect, UserSession } from "@stacks/connect";
 import {
+  handleGetProduct,
   handleProductUpload,
   handleUpdateProduct,
 } from "../firebase/firestone";
@@ -29,13 +30,17 @@ function DashboardMenu() {
   const [modal, setModal] = useState(false);
   const [error, setError] = useState("");
 
+  const [products, setProducts] = useState([]);
+  const [uploadStatus, setUploadStatus] = useState(false);
+
   const {
-    txId,
+    // txId,
     status,
-    error: txError,
+    // error: txError,
     trackTransaction,
   } = useTransactionStatus();
 
+  // error message
   useEffect(
     function () {
       if (!error) return;
@@ -49,6 +54,7 @@ function DashboardMenu() {
     [error]
   );
 
+  // update product
   useEffect(
     function () {
       async function updateProduct() {
@@ -64,6 +70,30 @@ function DashboardMenu() {
       updateProduct();
     },
     [pId, status]
+  );
+
+  // get product
+  useEffect(
+    function () {
+      async function getProduct() {
+        if (!address) return;
+
+        try {
+          const products = await handleGetProduct(address);
+          products.forEach((doc) =>
+            setProducts((item) => [...item, doc.data()])
+          );
+          products.forEach((doc) => console.log(doc.id, "=>", doc.data()));
+
+          setUploadStatus(false);
+        } catch (error) {
+          console.log(error.message);
+        }
+      }
+
+      getProduct();
+    },
+    [uploadStatus]
   );
 
   const appConfig = new AppConfig(["store_write", "publish_data"]);
@@ -116,6 +146,7 @@ function DashboardMenu() {
 
           // Optional: Add success notification
           alert("Product created successfully!");
+          setUploadStatus(true);
         } catch (error) {
           setError("Firebase upload error:", error.message);
         }
@@ -342,40 +373,56 @@ function DashboardMenu() {
               <span className="col-start-10">Activity</span>
             </li>
 
-            {!txId && (
+            {products.length === 0 && (
               <p className="bg-white text-center py-8">
                 There is no Recent Item
               </p>
             )}
 
-            {txId && (
-              <li className="grid items-center grid-cols-10 gap-4 px-10 py-6 bg-white">
-                <figure className="col-span-1 h-36 bg-primary rounded-xl">
-                  <img
-                    src={image}
-                    alt=""
-                    className="w-full h-full rounded-xl"
-                  />
-                </figure>
+            {products &&
+              products.map((product, i) => (
+                <li
+                  className="grid items-center grid-cols-10 gap-4 px-10 py-6 bg-white"
+                  key={i}
+                >
+                  <figure className="col-span-1 h-36 bg-primary rounded-xl">
+                    <img
+                      src={product.productImage}
+                      alt="product image"
+                      className="w-full h-full rounded-xl"
+                    />
+                  </figure>
 
-                <span className="col-span-3 col-start-2">
-                  <h5 className="mb-2 font-semibold">{productName}</h5>
-                  <p>Blockchain ID: {`${txId?.slice(0, 25)}....`}</p>
-                </span>
-                <span className="col-start-6">
-                  {/* {new Date(blockTime).toLocaleDateString()} */}
-                </span>
+                  <span className="col-span-3 col-start-2">
+                    <h5 className="mb-2 font-semibold">
+                      {product.productName}
+                    </h5>
+                    <p>
+                      Blockchain ID:{" "}
+                      {`${product.blockchainId?.slice(0, 25)}....`}
+                    </p>
+                  </span>
+                  <span className="col-start-6">
+                    {new Date(product.createdAt).toLocaleDateString()}
+                  </span>
 
-                <button className="col-start-10 px-6 py-2 text-left bg-opacity-50 border-2 rounded-full bg-primary">
-                  {status === "pending" && "pending"}
-                  {status === "abort_by_response" && "aborted"}
-                  {status === "success" && "success"}
-                  {txError && (
-                    <span className="status-error">Error: {txError}</span>
-                  )}
-                </button>
-              </li>
-            )}
+                  {/* <button className="col-start-10 px-6 py-2 text-left bg-opacity-50 border-2 rounded-full bg-primary">
+                    {status === "pending" && "pending"}
+                    {status === "abort_by_response" && "aborted"}
+                    {status === "success" && "success"}
+                    {txError && (
+                      <span className="status-error">Error: {txError}</span>
+                    )}
+                  </button> */}
+
+                  <button className="col-start-10 px-6 py-2 text-left bg-opacity-50 border-2 rounded-full bg-primary">
+                    {product.status === "abort_by_response" && "aborted"}
+                    {product.status === "pending" && "pending"}
+                    {product.status === "success" && "success"}
+                    {!product.status && "pending"}
+                  </button>
+                </li>
+              ))}
           </ul>
         </div>
       </section>

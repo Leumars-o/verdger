@@ -13,12 +13,13 @@ import { app } from "./config";
 // initialize database
 const db = getFirestore(app);
 
-// function for uploading product details
+// function for creating product details
 export const handleProductUpload = async function (productObj) {
   const doc = await addDoc(collection(db, "products"), productObj);
   return doc.id;
 };
 
+// function for updating a product on firestore
 export const handleUpdateProduct = async function (productId, updateValueObj) {
   const docRef = doc(db, "products", productId);
   const query = await updateDoc(docRef, updateValueObj);
