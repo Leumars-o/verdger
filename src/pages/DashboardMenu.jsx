@@ -406,15 +406,6 @@ function DashboardMenu() {
                     {new Date(product.createdAt).toLocaleDateString()}
                   </span>
 
-                  {/* <button className="col-start-10 px-6 py-2 text-left bg-opacity-50 border-2 rounded-full bg-primary">
-                    {status === "pending" && "pending"}
-                    {status === "abort_by_response" && "aborted"}
-                    {status === "success" && "success"}
-                    {txError && (
-                      <span className="status-error">Error: {txError}</span>
-                    )}
-                  </button> */}
-
                   <button className="col-start-10 px-6 py-2 text-left bg-opacity-50 border-2 rounded-full bg-primary">
                     {product.status === "abort_by_response" && "aborted"}
                     {product.status === "pending" && "pending"}
