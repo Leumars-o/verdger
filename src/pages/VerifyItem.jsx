@@ -104,9 +104,14 @@ function VerifyItem() {
                 )}
 
                 {detail && (
-                  <button className="col-span-2 px-10 py-4 mt-8 font-semibold text-white bg-cta rounded-2xl">
-                    Transfer Ownership
-                  </button>
+                  <div className="col-span-2 mt-8 font-semibold text-white flex items-start gap-3">
+                    <button className="bg-cta rounded-2xl px-10 py-4">
+                      License Product
+                    </button>
+                    <button className="bg-cta rounded-2xl px-10 py-4">
+                      Transfer Product
+                    </button>
+                  </div>
                 )}
 
                 {!detail && (
