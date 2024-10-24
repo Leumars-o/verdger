@@ -48,11 +48,11 @@ function Assets() {
           </p>
         )}
 
-        <div className="flex items-stretch gap-8 text-12 text-cta">
+        <div className="grid grid-cols-3 items-stretch gap-8 text-12 text-cta">
           {products &&
             products.map((product, i) => (
               <article
-                className="flex flex-col items-center w-1/3 gap-5 px-4 py-4 bg-secondary bg-opacity-20 rounded-3xl"
+                className="flex flex-col items-center gap-5 px-4 py-4 bg-secondary bg-opacity-20 rounded-3xl"
                 key={i}
               >
                 <figure className="w-35 bg-white h-19 rounded-2xl">
