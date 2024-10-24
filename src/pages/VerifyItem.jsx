@@ -6,6 +6,7 @@ function VerifyItem() {
   const { id } = useParams();
   const [product, setProduct] = useState([]);
   const [error, setError] = useState("");
+  const [detail, setDetail] = useState(false);
 
   useEffect(function () {
     async function getProductById() {
@@ -91,14 +92,21 @@ function VerifyItem() {
                   {item.status === "success" && "Transaction Succeed"}
                 </li>
 
-                <li className="col-span-2">
-                  <span className="font-medium">Description: </span>
-                  {item.productDes}
-                </li>
+                {detail && (
+                  <li className="col-span-2">
+                    <span className="font-medium">Description: </span>
+                    {item.productDes}
+                  </li>
+                )}
 
-                <button className="col-span-2 px-10 py-4 mt-8 font-semibold text-white bg-cta rounded-2xl">
-                  More Details
-                </button>
+                {!detail && (
+                  <button
+                    className="col-span-2 px-10 py-4 mt-8 font-semibold text-white bg-cta rounded-2xl"
+                    onClick={() => setDetail((bool) => !bool)}
+                  >
+                    More Details
+                  </button>
+                )}
               </ul>
             </article>
           </React.Fragment>
