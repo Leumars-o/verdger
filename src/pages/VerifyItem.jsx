@@ -50,7 +50,7 @@ function VerifyItem() {
             <h2 className="self-start mt-32 font-semibold text-28">
               Product Details
             </h2>
-            <article className="flex items-center self-start w-full gap-8 mt-8 text-16">
+            <article className="flex items-center self-start w-full gap-8 mt-8 text-16 pr-48">
               <figure className="w-4/12 bg-white h-19 rounded-2xl overflow-hidden">
                 <img
                   src={item.productImage}
