@@ -80,7 +80,6 @@ function DashboardMenu() {
 
         try {
           const products = await handleGetProduct(address);
-          console.log(products.docs);
           products.forEach((doc) => console.log(doc.id, "=>", doc.data()));
 
           const newProducts = products.docs.map((doc) => doc.data());
