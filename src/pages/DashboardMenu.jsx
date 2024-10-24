@@ -172,6 +172,7 @@ function DashboardMenu() {
           "productOwner",
           userData.profile.stxAddress.testnet
         );
+        setUploadStatus(true);
       },
       userSession,
     });
