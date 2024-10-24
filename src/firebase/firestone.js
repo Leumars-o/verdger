@@ -44,3 +44,17 @@ export const handleGetProduct = async function (ownerAddress) {
 
   return getData;
 };
+
+// function to get data based on productId
+export const handleGetPoductById = async function (productId) {
+  const firebaseQuery = query(
+    collection(db, "products"),
+    where("productId", "==", productId)
+  );
+  const getData = await getDocs(firebaseQuery);
+
+  if (!getData)
+    throw new Error(
+      "There is a problem with your internet or data doesn't exist"
+    );
+};
