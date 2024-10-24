@@ -80,10 +80,11 @@ function DashboardMenu() {
 
         try {
           const products = await handleGetProduct(address);
-          const newProducts = products.map((doc) => doc.data());
-          setProducts((prevProducts) => [...prevProducts, ...newProducts]);
-
+          console.log(products.docs);
           products.forEach((doc) => console.log(doc.id, "=>", doc.data()));
+
+          const newProducts = products.docs.map((doc) => doc.data());
+          setProducts(newProducts);
 
           setUploadStatus(false);
         } catch (error) {
