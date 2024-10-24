@@ -121,7 +121,7 @@ function DashboardMenu() {
     const options = {
       network: new StacksTestnet(),
       contractAddress: "ST3DRW5EAHRNFXYAW9ZXT1Q6BQ0GXMDEX0ARXDCMA",
-      contractName: "authentify",
+      contractName: "authentify-v4",
       functionName: "create-product",
       functionArgs,
       appDetails: {
