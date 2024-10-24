@@ -9,6 +9,8 @@ function VerifyItem() {
 
   useEffect(function () {
     async function getProductById() {
+      setError("");
+
       try {
         const data = await handleGetProductById(Number(id));
         const productData = data.docs.map((doc) => doc.data());
@@ -85,6 +87,11 @@ function VerifyItem() {
                   <span className="font-medium">Status:</span>{" "}
                   {item.status === "abort_by_response" && "Transaction Failed"}
                   {item.status === "success" && "Transaction Succeed"}
+                </li>
+
+                <li className="col-span-2">
+                  <span className="font-medium">Description: </span>
+                  {item.productDes}
                 </li>
 
                 <button className="col-span-2 px-10 py-4 mt-8 font-semibold text-white bg-cta rounded-2xl">
