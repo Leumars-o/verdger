@@ -4,9 +4,6 @@
 ;; summary: Authentify is a smart contract for managing authentication and verification of products.
 ;; description:
 
-;; Define the contract owner
-(define-data-var contract-owner principal tx-sender)
-
 ;; traits
 ;;
 
@@ -147,7 +144,7 @@
         (caller tx-sender)
         (block-time (unwrap! (get-block-info? time u0) (err-with-message ERR_INVALID_GET_RESPONSE)))
     )
-    (asserts! (is-eq caller (var-get contract-owner)) (err-with-message ERR_UNAUTHORIZED))
+    (asserts! (is-eq caller (as-contract tx-sender)) (err-with-message ERR_UNAUTHORIZED))
     (asserts! (valid-product-id? product-id) (err-with-message ERR_INVALID_PRODUCT_ID))
     (asserts! (valid-name? name) (err-with-message ERR_INVALID_NAME))
     (asserts! (valid-description? description) (err-with-message ERR_INVALID_DESCRIPTION))
