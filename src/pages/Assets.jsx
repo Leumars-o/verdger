@@ -36,8 +36,17 @@ function Assets() {
         </button>
       </form>
 
-      <div className="mt-32">
-        <h2 className="mb-8 font-semibold text-28">Your Items</h2>
+      <div className="mt-32 w-full">
+        <h2 className="mb-8 font-semibold text-28 text-center">Your Items</h2>
+
+        {products.length === 0 && (
+          <p className="w-full text-center text-16">
+            Try connecting your wallet or{" "}
+            <Link to="/dashboard" className="underline underline-offset-4">
+              Go Add a Product
+            </Link>
+          </p>
+        )}
 
         <div className="flex items-stretch gap-8 text-12 text-cta">
           {products &&
