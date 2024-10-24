@@ -44,6 +44,8 @@ function VerifyItem() {
         authenticity of your item
       </p>
 
+      {error && <p className="text-center">{error}</p>}
+
       {product &&
         product.map((item, i) => (
           <React.Fragment key={i}>
