@@ -80,6 +80,7 @@ function DashboardMenu() {
 
         try {
           const products = await handleGetProduct(address);
+          console.log(products);
           products.forEach((doc) =>
             setProducts((item) => [...item, doc.data()])
           );

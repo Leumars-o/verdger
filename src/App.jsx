@@ -1,3 +1,4 @@
+import React from "react";
 import { Route } from "react-router-dom";
 import { BrowserRouter, Routes } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
@@ -13,6 +14,7 @@ function App() {
           <Route index element={<DashboardMenu />} />
           <Route path="dashboard" element={<DashboardMenu />} />
           <Route path="verify-item" element={<VerifyItem />} />
+          <Route path="verify-item/:id" element={<VerifyItem />} />
           <Route path="my-assets" element={<Assets />} />
         </Route>
       </Routes>
