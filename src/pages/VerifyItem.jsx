@@ -3,14 +3,16 @@ import { handleGetProductById } from "../firebase/firestone";
 import { useParams } from "react-router-dom";
 import { StacksTestnet } from "@stacks/network";
 import { openContractCall } from "@stacks/connect";
+import { principalCV, uintCV } from "@stacks/transactions";
 
 function VerifyItem() {
   const { id } = useParams();
   const [product, setProduct] = useState([]);
-  const [license, setLicense] = useState("");
+  const [licensee, setLicensee] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-  const [error, setError] = useState("");
   const [detail, setDetail] = useState(false);
+
+  const [error, setError] = useState("");
 
   // get entire product detail
   useEffect(
@@ -33,7 +35,7 @@ function VerifyItem() {
   );
 
   const handleLicenseProduct = async function () {
-    const functionArgs = [];
+    const functionArgs = [uintCV(product.productId), principalCV(licensee)];
 
     const options = {
       network: new StacksTestnet(),
@@ -134,9 +136,9 @@ function VerifyItem() {
                       type="text"
                       className="outline-none rounded-2xl mt-2 p-4"
                       placeholder="Enter Licensee Address"
-                      onChange={(e) => setLicense(e.target.value)}
+                      onChange={(e) => setLicensee(e.target.value)}
                     />
-                    {license.length === 41 && (
+                    {licensee.length === 41 && (
                       <button
                         className="bg-cta px-10 py-3 text-white rounded-2xl"
                         onClick={handleLicenseProduct}
@@ -151,7 +153,7 @@ function VerifyItem() {
                   <div className="col-span-2 mt-8 font-semibold text-white flex items-start gap-3">
                     <button
                       className="bg-cta rounded-2xl px-10 py-4"
-                      onClick={() => setIsOpen(true)}
+                      onClick={() => setIsOpen((bool) => !bool)}
                     >
                       Initiate License Product
                     </button>
