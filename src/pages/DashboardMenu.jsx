@@ -384,7 +384,7 @@ function DashboardMenu() {
                       </div>
 
                       <Link
-                        to={`/verify/${product.productId}`}
+                        to={`/verify-item/${product.productId}`}
                         className="w-full py-2 text-white bg-cta rounded-xl text-13 text-center mt-10"
                       >
                         Product Details
