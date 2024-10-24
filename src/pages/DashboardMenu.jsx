@@ -19,6 +19,7 @@ import { uintCV, stringAsciiCV } from "@stacks/transactions";
 import generateRandomId from "../util/generateRandomId";
 import { StacksTestnet } from "@stacks/network";
 import { useTransactionStatus } from "../hooks/useTransactionStatus";
+import { Link } from "react-router-dom";
 
 function DashboardMenu() {
   const [image, setImage] = useState(sessionStorage.productImage || "");
@@ -382,9 +383,12 @@ function DashboardMenu() {
                         </button> */}
                       </div>
 
-                      <button className="w-full py-2 text-white bg-cta rounded-xl text-13 mt-10">
+                      <Link
+                        to={`/verify/${product.productId}`}
+                        className="w-full py-2 text-white bg-cta rounded-xl text-13 text-center mt-10"
+                      >
                         Product Details
-                      </button>
+                      </Link>
                     </article>
                   )
               )}
