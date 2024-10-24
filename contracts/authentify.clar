@@ -260,8 +260,19 @@
             }
         )
 
+        ;; create ownership transfer record
+        (map-set ownership-transfers 
+          { transfer-id: transfer-id } 
+          {
+            product-id: product-id,
+            from: caller,
+            to: new-owner,
+            transferred-at: block-time
+          }
+        )
+
         ;; Update product transfer history
-        (ok (map-set product-transfers 
+        (map-set product-transfers 
           { product-id: product-id }
           {
             transfer-history: (unwrap! 
@@ -269,8 +280,11 @@
                 (append (get transfer-history existing-transfers) transfer-id) u200)
                   (err-with-message ERR_INVALID_SET_RESPONSE)
             )
-          })
+          }
         )
+
+        ;; Return transfer ID
+        (ok transfer-id)
     )
 )
 
@@ -289,6 +303,7 @@
     )
 
     ;; Verify conditions
+    (asserts! (valid-transfer-id? transfer-id) (err-with-message ERR_INVALID_TRANSFER_ID))
     (asserts! (is-eq caller (get to transfer)) (err-with-message ERR_UNAUTHORIZED))
     (asserts! (is-transfer-valid? transfer) (err-with-message ERR_TRANSFER_EXPIRED))
     (asserts! (is-eq transfer-code (get transfer-code transfer)) 
@@ -335,6 +350,7 @@
     )
 
     ;; Verify conditions
+    (asserts! (valid-transfer-id? transfer-id) (err-with-message ERR_INVALID_TRANSFER_ID))
     (asserts! (is-eq (get from transfer) caller) (err-with-message ERR_UNAUTHORIZED))
     (asserts! (is-eq (get status transfer) "pending") 
       (err-with-message ERR_INVALID_TRANSFER_STATUS))
@@ -488,7 +504,18 @@
     )
 )
 
-
+;; Helper function to validate transfer ID
+(define-private (valid-transfer-id? (transfer-id uint))
+  (let
+    (
+      (current-nonce (var-get transfer-id-nonce))
+    )
+    (and 
+      (>= transfer-id u0)
+      (<= transfer-id current-nonce)
+    )
+  )
+)
 ;; Modified error response function
 (define-private (err-with-message (error-code uint))
   (err (tuple (code error-code) (message (get-error-message error-code))))
