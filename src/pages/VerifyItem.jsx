@@ -42,59 +42,60 @@ function VerifyItem() {
         authenticity of your item
       </p>
 
-      <h2 className="self-start mt-32 font-semibold text-28">
-        Product Details
-      </h2>
-
       {product &&
         product.map((item, i) => (
-          <article
-            className="flex items-center self-start w-full gap-8 mt-8 text-16"
-            key={i}
-          >
-            <figure className="w-4/12 bg-white h-19 rounded-2xl overflow-hidden">
-              <img
-                src={item.productImage}
-                alt=""
-                className="rounded-2xl w-full h-full"
-              />
-            </figure>
+          <>
+            <h2 className="self-start mt-32 font-semibold text-28">
+              Product Details
+            </h2>
+            <article
+              className="flex items-center self-start w-full gap-8 mt-8 text-16"
+              key={i}
+            >
+              <figure className="w-4/12 bg-white h-19 rounded-2xl overflow-hidden">
+                <img
+                  src={item.productImage}
+                  alt=""
+                  className="rounded-2xl w-full h-full"
+                />
+              </figure>
 
-            <ul className="grid flex-1 grid-cols-2 gap-2">
-              <li>
-                <span className="font-medium">Date Created:</span>{" "}
-                {new Date(item.createdAt).toLocaleDateString("en-GB", {
-                  day: "numeric",
-                  month: "long",
-                  year: "numeric",
-                })}
-              </li>
-              <li>
-                <span className="font-medium">Registered By:</span>{" "}
-                {item.productOwner.slice(0, 16) + "...."}
-              </li>
-              <li>
-                <span className="font-medium">Blockchain ID:</span>{" "}
-                {item.blockchainId.slice(0, 16) + "...."}
-              </li>
-              <li>
-                <span className="font-medium">Ownership:</span> Transferred
-              </li>
-              <li>
-                <span className="font-medium">Product Name:</span>{" "}
-                {item.productName}
-              </li>
-              <li>
-                <span className="font-medium">Status:</span>{" "}
-                {item.status === "abort_by_response" && "Transaction Failed"}
-                {item.status === "success" && "Transaction Succeed"}
-              </li>
+              <ul className="grid flex-1 grid-cols-2 gap-2">
+                <li>
+                  <span className="font-medium">Date Created:</span>{" "}
+                  {new Date(item.createdAt).toLocaleDateString("en-GB", {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                  })}
+                </li>
+                <li>
+                  <span className="font-medium">Registered By:</span>{" "}
+                  {item.productOwner.slice(0, 16) + "...."}
+                </li>
+                <li>
+                  <span className="font-medium">Blockchain ID:</span>{" "}
+                  {item.blockchainId.slice(0, 16) + "...."}
+                </li>
+                <li>
+                  <span className="font-medium">Ownership:</span> Transferred
+                </li>
+                <li>
+                  <span className="font-medium">Product Name:</span>{" "}
+                  {item.productName}
+                </li>
+                <li>
+                  <span className="font-medium">Status:</span>{" "}
+                  {item.status === "abort_by_response" && "Transaction Failed"}
+                  {item.status === "success" && "Transaction Succeed"}
+                </li>
 
-              <button className="col-span-2 px-10 py-4 mt-8 font-semibold text-white bg-cta rounded-2xl">
-                More Details
-              </button>
-            </ul>
-          </article>
+                <button className="col-span-2 px-10 py-4 mt-8 font-semibold text-white bg-cta rounded-2xl">
+                  More Details
+                </button>
+              </ul>
+            </article>
+          </>
         ))}
     </section>
   );
