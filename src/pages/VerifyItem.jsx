@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { handleGetProductById } from "../firebase/firestone";
 import { useParams } from "react-router-dom";
+import { StacksTestnet } from "@stacks/network";
+import { openContractCall } from "@stacks/connect";
 
 function VerifyItem() {
   const { id } = useParams();
   const [product, setProduct] = useState([]);
+  const [license, setLicense] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
   const [error, setError] = useState("");
   const [detail, setDetail] = useState(false);
 
@@ -27,6 +31,27 @@ function VerifyItem() {
     },
     [id]
   );
+
+  const handleLicenseProduct = async function () {
+    const functionArgs = [];
+
+    const options = {
+      network: new StacksTestnet(),
+      contractAddress: "ST3DRW5EAHRNFXYAW9ZXT1Q6BQ0GXMDEX0ARXDCMA",
+      contractName: "authentify-v4",
+      functionArgs,
+      appDetails: {
+        name: "Verdger",
+        icon: window.location.origin + "/src/assets/verger-logo.svg",
+      },
+      onFinish: function (data) {
+        console.log(data.txId);
+      },
+    };
+
+    await openContractCall(options);
+  };
+  const handleProductTransfer = async function () {};
 
   return (
     <section className="flex flex-col items-center flex-1 gap-2 px-10 py-20 bg-opacity-30 bg-primary min-h-screen overflow-y-auto">
@@ -103,12 +128,37 @@ function VerifyItem() {
                   </li>
                 )}
 
+                {isOpen && (
+                  <div className="flex items-center gap-3">
+                    <input
+                      type="text"
+                      className="outline-none rounded-2xl mt-2 p-4"
+                      placeholder="Enter Licensee Address"
+                      onChange={(e) => setLicense(e.target.value)}
+                    />
+                    {license.length === 41 && (
+                      <button
+                        className="bg-cta px-10 py-3 text-white rounded-2xl"
+                        onClick={handleLicenseProduct}
+                      >
+                        License
+                      </button>
+                    )}
+                  </div>
+                )}
+
                 {detail && (
                   <div className="col-span-2 mt-8 font-semibold text-white flex items-start gap-3">
-                    <button className="bg-cta rounded-2xl px-10 py-4">
-                      License Product
+                    <button
+                      className="bg-cta rounded-2xl px-10 py-4"
+                      onClick={() => setIsOpen(true)}
+                    >
+                      Initiate License Product
                     </button>
-                    <button className="bg-cta rounded-2xl px-10 py-4">
+                    <button
+                      className="bg-cta rounded-2xl px-10 py-4"
+                      onClick={handleProductTransfer}
+                    >
                       Transfer Product
                     </button>
                   </div>
