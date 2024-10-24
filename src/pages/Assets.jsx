@@ -1,3 +1,5 @@
+import React from "react";
+
 function Assets() {
   return (
     <section className="flex flex-col items-center flex-1 gap-2 px-5 py-20 bg-opacity-30 bg-primary overflow-y-auto">
