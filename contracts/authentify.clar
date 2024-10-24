@@ -116,7 +116,15 @@
     }
 )
 
-;; Store transfer proposals with transfer codes
+;; Map to store all transfers for a product
+(define-map product-transfers
+    { product-id: uint }
+    {
+      transfer-history: (list 200 uint), ;; list of transfer ID's up to 200 entries
+    }
+)
+
+;; Map to Store transfer proposals with transfer codes
 (define-map transfer-proposals
     { transfer-id: uint }
     {
@@ -228,6 +236,7 @@
             (license (unwrap! (map-get? product-licenses { product-id: product-id }) (err-with-message ERR_INVALID_PRODUCT_LICENSE)))
             (block-time (unwrap! (get-block-info? time u0) (err-with-message ERR_INVALID_GET_RESPONSE)))
             (transfer-id (generate-transfer-id))
+            (existing-transfers (default-to { transfer-history: (list) } (map-get? product-transfers { product-id: product-id })))
         )
         
         ;; Verify conditions
@@ -238,7 +247,7 @@
         (asserts! (valid-transfer-code? transfer-code) (err-with-message ERR_TRANSFER_CODE_LENGTH))
 
         ;; Create transfer proposal
-        (ok (map-set transfer-proposals
+        (map-set transfer-proposals
             { transfer-id: transfer-id }
             {
                 product-id: product-id,
@@ -249,7 +258,19 @@
                 expires-at: (+ block-time u86400), ;; Expires in 24 hours
                 status: "pending"
             }
-        ))
+        )
+
+        ;; Update product transfer history
+        (ok (map-set product-transfers 
+          { product-id: product-id }
+          {
+            transfer-history: (unwrap! 
+              (as-max-len? 
+                (append (get transfer-history existing-transfers) transfer-id) u200)
+                  (err-with-message ERR_INVALID_SET_RESPONSE)
+            )
+          })
+        )
     )
 )
 
@@ -268,15 +289,21 @@
     )
 
     ;; Verify conditions
-    (asserts! (is-eq (get to transfer)) (err-with-message ERR_UNAUTHORIZED))
-    (asserts! (is-transfer-valid?) (err-with-message ERR_TRANSFER_EXPIRED))
+    (asserts! (is-eq caller (get to transfer)) (err-with-message ERR_UNAUTHORIZED))
+    (asserts! (is-transfer-valid? transfer) (err-with-message ERR_TRANSFER_EXPIRED))
     (asserts! (is-eq transfer-code (get transfer-code transfer)) 
       (err-with-message ERR_INVALID_TRANSFER_CODE))
+
+    ;; Update transfer status
+    (map-set transfer-proposals 
+      { transfer-id: transfer-id }
+      (merge transfer { status: "completed" })
+    )
 
     ;; Update product ownership
     (map-set products
       { product-id: (get product-id transfer) }
-      (merge product { owner: (some (caller)) })
+      (merge product { owner: (some caller) })
     )
 
     ;; Update product license and ownership history
@@ -298,73 +325,26 @@
   )
 )
 
-
-;; Define a function to transfer ownership of a licensed product
-(define-public (transfer-ownership (product-id uint) (new-owner principal)) 
-    (let
-        (
-            (product (unwrap! (map-get? products { product-id: product-id }) (err-with-message ERR_PRODUCT_NOT_FOUND)))
-            (license (unwrap! (map-get? product-licenses { product-id: product-id }) (err-with-message ERR_INVALID_PRODUCT_LICENSE)))
-            (caller tx-sender)
-            (block-time (unwrap! (get-block-info? time u0) (err-with-message ERR_INVALID_GET_RESPONSE)))
-            (transfer-id (generate-transfer-id))
-        )
-        
-        (asserts! (valid-product-id? product-id) (err-with-message ERR_INVALID_PRODUCT_ID))
-        (asserts! (get is-licensed product) (err-with-message ERR_PRODUCT_ALREADY_LICENSED))
-        (asserts! (is-eq (get current-owner license) caller) (err-with-message ERR_UNAUTHORIZED))
-        (asserts! (not (is-eq new-owner caller)) (err-with-message ERR_UNAUTHORIZED))
-
-        (map-set products
-            { product-id: product-id }
-            (merge product { owner: (some new-owner) })
-        )
-
-        (asserts! 
-            (map-set products
-                { product-id: product-id }
-                (merge product { owner: (some new-owner) })
-            ) (err-with-message ERR_INVALID_SET_RESPONSE)
-        )
-
-        (map-set ownership-transfers
-            { transfer-id: transfer-id }
-            {
-                product-id: product-id,
-                from: caller,
-                to: new-owner,
-                transferred-at: block-time
-            }
-        )
-
-        (asserts!
-            (map-set ownership-transfers
-                { transfer-id: transfer-id }
-                {
-                    product-id: product-id,
-                    from: caller,
-                    to: new-owner,
-                    transferred-at: block-time
-                }
-            ) (err-with-message ERR_INVALID_SET_RESPONSE)
-        )
-
-        (ok (map-set product-licenses 
-            { product-id: product-id } 
-            (merge license
-                {
-                    current-owner: new-owner,
-                    ownership-history: (unwrap! 
-                        (as-max-len? 
-                            (append (get ownership-history license) transfer-id)
-                            u200
-                        ) 
-                        (err-with-message ERR_INVALID_SET_RESPONSE)
-                    )
-                }
-            )
-        ))
+;; Define a function to cancel a transfer
+(define-public (cancel-transfer (transfer-id uint))
+  (let
+    (
+      (caller tx-sender)
+      (transfer (unwrap! (map-get? transfer-proposals { transfer-id: transfer-id })
+        (err-with-message ERR_INVALID_TRANSFER_ID)))
     )
+
+    ;; Verify conditions
+    (asserts! (is-eq (get from transfer) caller) (err-with-message ERR_UNAUTHORIZED))
+    (asserts! (is-eq (get status transfer) "pending") 
+      (err-with-message ERR_INVALID_TRANSFER_STATUS))
+
+    ;; Update transfer status
+    (ok (map-set transfer-proposals
+      { transfer-id: transfer-id }
+      (merge transfer { status: "cancelled" })
+    ))
+  )
 )
 
 ;; Define a function to dispute a product
@@ -394,10 +374,7 @@
 
 ;; Define function to get product license details
 (define-read-only (get-license-details (product-id uint)) 
-  (match (map-get? product-licenses { product-id: product-id })
-    value (ok value)
-    (err-with-message ERR_INVALID_PRODUCT_LICENSE)
-  )
+  (map-get? product-licenses { product-id: product-id })
 )
 
 ;; Define a function to get transfer details
@@ -410,8 +387,35 @@
   (match (map-get? product-licenses { product-id: product-id })
     license (map get-transfer-details (get ownership-history license))
     (list)
-    
   )
+)
+
+;; define-read-only function to get all transfers for a product
+(define-read-only (get-all-transfers (product-id uint))
+  (let
+    (
+      (transfers (map-get? product-transfers { product-id: product-id }))
+    )
+    (match transfers
+      transfer-list (map get-transfer-proposal (get transfer-history transfer-list))
+      (list)
+    )
+  )
+)
+
+;; define a function to get transfer proposal details
+(define-read-only (get-transfer-proposal (transfer-id uint))
+    (match (map-get? transfer-proposals { transfer-id: transfer-id })
+      transfer (some {
+        product-id: (get product-id transfer),
+        from: (get from transfer),
+        to: (get to transfer),
+        created-at: (get created-at transfer),
+        expires-at: (get expires-at transfer),
+        status: (get status transfer)
+      })
+      none
+    )
 )
 
 ;; private functions
@@ -483,6 +487,7 @@
         )
     )
 )
+
 
 ;; Modified error response function
 (define-private (err-with-message (error-code uint))
