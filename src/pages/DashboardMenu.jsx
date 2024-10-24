@@ -395,10 +395,13 @@ function DashboardMenu() {
               )}
           </div>
 
-          <button className="px-6 py-4 mt-6 text-white rounded-full text-13 bg-cta">
+          <Link
+            to="/my-assets"
+            className="px-6 py-4 mt-6 text-white rounded-full text-13 bg-cta inline-block"
+          >
             View All Items {">"}
             {">"}
-          </button>
+          </Link>
         </div>
 
         <div>
