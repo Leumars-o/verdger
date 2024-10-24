@@ -99,6 +99,12 @@ function VerifyItem() {
                   </li>
                 )}
 
+                {detail && (
+                  <button className="col-span-2 px-10 py-4 mt-8 font-semibold text-white bg-cta rounded-2xl">
+                    Transfer Ownership
+                  </button>
+                )}
+
                 {!detail && (
                   <button
                     className="col-span-2 px-10 py-4 mt-8 font-semibold text-white bg-cta rounded-2xl"
