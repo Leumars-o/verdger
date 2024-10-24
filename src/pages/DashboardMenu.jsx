@@ -323,6 +323,12 @@ function DashboardMenu() {
           </div>
 
           <div className="flex items-stretch gap-8 text-12 text-cta">
+            {products.length === 0 && (
+              <p className="text-center w-full text-16">
+                Connect Your Wallet or Add a new Item
+              </p>
+            )}
+
             {products &&
               products.map(
                 (product, i) =>
@@ -395,13 +401,15 @@ function DashboardMenu() {
               )}
           </div>
 
-          <Link
-            to="/my-assets"
-            className="px-6 py-4 mt-6 text-white rounded-full text-13 bg-cta inline-block"
-          >
-            View All Items {">"}
-            {">"}
-          </Link>
+          {products.length !== 0 && (
+            <Link
+              to="/my-assets"
+              className="px-6 py-4 mt-6 text-white rounded-full text-13 bg-cta inline-block"
+            >
+              View All Items {">"}
+              {">"}
+            </Link>
+          )}
         </div>
 
         <div>
