@@ -1,6 +1,26 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { handleGetProductById } from "../firebase/firestone";
+import { useParams } from "react-router-dom";
 
 function VerifyItem() {
+  const { id } = useParams();
+  const [product, setProduct] = useState([]);
+  const [error, setError] = useState("");
+
+  useEffect(function () {
+    async function getProductById() {
+      try {
+        const data = await handleGetProductById(Number(id));
+        const productData = data.docs.map((doc) => doc.data());
+        setProduct(productData);
+      } catch (error) {
+        setError(error.message);
+      }
+    }
+
+    getProductById();
+  }, []);
+
   return (
     <section className="flex flex-col items-center flex-1 gap-2 px-10 py-20 bg-opacity-30 bg-primary">
       <h1 className="mb-20 font-semibold text-center text-28 text-cta">
@@ -26,39 +46,56 @@ function VerifyItem() {
         Product Details
       </h2>
 
-      <article className="flex items-center self-start w-full gap-8 mt-8 text-16">
-        <figure className="w-4/12 bg-white h-19 rounded-2xl"></figure>
-        <ul className="grid flex-1 grid-cols-2 gap-2">
-          <li>
-            <span className="inline-block w-4 h-4 mr-2 rounded-full bg-cta"></span>
-            <b>Date Created: </b> 11th October, 2024
-          </li>
-          <li>
-            <span className="inline-block w-4 h-4 mr-2 rounded-full bg-cta"></span>
-            <b>Registered By: </b> Emmanuel Godfrey
-          </li>
-          <li>
-            <span className="inline-block w-4 h-4 mr-2 rounded-full bg-cta"></span>
-            <b>Quality check: </b> Certified Original
-          </li>
-          <li>
-            <span className="inline-block w-4 h-4 mr-2 rounded-full bg-cta"></span>
-            <b>Ownership: </b> Transferred
-          </li>
-          <li>
-            <span className="inline-block w-4 h-4 mr-2 rounded-full bg-cta"></span>
-            <b>Current Owner: </b> Leumas Okechukwu
-          </li>
-          <li>
-            <span className="inline-block w-4 h-4 mr-2 rounded-full bg-cta"></span>
-            <b>Dispute: </b> None
-          </li>
+      {product &&
+        product.map((item, i) => (
+          <article
+            className="flex items-center self-start w-full gap-8 mt-8 text-16"
+            key={i}
+          >
+            <figure className="w-4/12 bg-white h-19 rounded-2xl overflow-hidden">
+              <img
+                src={item.productImage}
+                alt=""
+                className="rounded-2xl w-full h-full"
+              />
+            </figure>
 
-          <button className="col-span-2 px-10 py-4 mt-8 font-semibold text-white bg-cta rounded-2xl">
-            More Details
-          </button>
-        </ul>
-      </article>
+            <ul className="grid flex-1 grid-cols-2 gap-2">
+              <li>
+                <span className="font-medium">Date Created:</span>{" "}
+                {new Date(item.createdAt).toLocaleDateString("en-GB", {
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric",
+                })}
+              </li>
+              <li>
+                <span className="font-medium">Registered By:</span>{" "}
+                {item.productOwner.slice(0, 16) + "...."}
+              </li>
+              <li>
+                <span className="font-medium">Blockchain ID:</span>{" "}
+                {item.blockchainId.slice(0, 16) + "...."}
+              </li>
+              <li>
+                <span className="font-medium">Ownership:</span> Transferred
+              </li>
+              <li>
+                <span className="font-medium">Product Name:</span>{" "}
+                {item.productName}
+              </li>
+              <li>
+                <span className="font-medium">Status:</span>{" "}
+                {item.status === "abort_by_response" && "Transaction Failed"}
+                {item.status === "success" && "Transaction Succeed"}
+              </li>
+
+              <button className="col-span-2 px-10 py-4 mt-8 font-semibold text-white bg-cta rounded-2xl">
+                More Details
+              </button>
+            </ul>
+          </article>
+        ))}
     </section>
   );
 }

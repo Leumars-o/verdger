@@ -46,7 +46,7 @@ export const handleGetProduct = async function (ownerAddress) {
 };
 
 // function to get data based on productId
-export const handleGetPoductById = async function (productId) {
+export const handleGetProductById = async function (productId) {
   const firebaseQuery = query(
     collection(db, "products"),
     where("productId", "==", productId)
@@ -57,4 +57,6 @@ export const handleGetPoductById = async function (productId) {
     throw new Error(
       "There is a problem with your internet or data doesn't exist"
     );
+
+  return getData;
 };
