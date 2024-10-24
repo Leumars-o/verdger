@@ -8,21 +8,25 @@ function VerifyItem() {
   const [error, setError] = useState("");
   const [detail, setDetail] = useState(false);
 
-  useEffect(function () {
-    async function getProductById() {
-      setError("");
+  // get entire product detail
+  useEffect(
+    function () {
+      async function getProductById() {
+        setError("");
 
-      try {
-        const data = await handleGetProductById(Number(id));
-        const productData = data.docs.map((doc) => doc.data());
-        setProduct(productData);
-      } catch (error) {
-        setError(error.message);
+        try {
+          const data = await handleGetProductById(Number(id));
+          const productData = data.docs.map((doc) => doc.data());
+          setProduct(productData);
+        } catch (error) {
+          setError(error.message);
+        }
       }
-    }
 
-    getProductById();
-  }, []);
+      getProductById();
+    },
+    [id]
+  );
 
   return (
     <section className="flex flex-col items-center flex-1 gap-2 px-10 py-20 bg-opacity-30 bg-primary min-h-screen overflow-y-auto">
