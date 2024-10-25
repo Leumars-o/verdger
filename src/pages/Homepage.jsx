@@ -64,7 +64,7 @@ export default function Homepage() {
 
     try {
       setIsSearching(true);
-      const data = await handleGetProductBySearch(search);
+      const data = await handleGetProductBySearch(Number(search));
       if (data.docs.length === 0)
         throw new Error("There is no product that match your search results");
 

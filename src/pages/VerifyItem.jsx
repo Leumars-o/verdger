@@ -14,6 +14,7 @@ function VerifyItem() {
   const [product, setProduct] = useState([]);
   const [licensee, setLicensee] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const [isOpenTransfer, setIsOpenTransfer] = useState(false);
   const [detail, setDetail] = useState(false);
   const [pId, setPID] = useState("");
   const { trackTransaction, status } = useTransactionStatus();
@@ -130,16 +131,16 @@ function VerifyItem() {
             <h2 className="self-start mt-32 font-semibold text-28">
               Product Details
             </h2>
-            <article className="flex items-center self-start w-full gap-8 mt-8 text-16 pr-48">
+            <article className="flex items-stretch gap-8 self-start w-full mt-8 text-16 pr-48">
               <figure className="w-4/12 bg-white h-19 rounded-2xl overflow-hidden">
                 <img
                   src={item.productImage}
                   alt=""
-                  className="rounded-2xl w-full h-full"
+                  className="rounded-2xl w-full h-full object-cover"
                 />
               </figure>
 
-              <ul className="grid flex-1 grid-cols-2 gap-2">
+              <ul className="grid grid-cols-2 gap-2 flex-1">
                 <li>
                   <span className="font-medium">Date Created:</span>{" "}
                   {new Date(item.createdAt).toLocaleDateString("en-GB", {
@@ -195,17 +196,40 @@ function VerifyItem() {
                   </div>
                 )}
 
+                {isOpenTransfer && (
+                  <div className="col-span-2 flex items-center gap-4">
+                    <input
+                      type="number"
+                      placeholder="Enter a four digit transfer code"
+                      className="outline-none w-1/3 px-4 py-3 rounded-xl"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Enter a owner address"
+                      className="outline-none w-1/3 px-4 py-3 rounded-xl"
+                    />
+
+                    <button className="bg-cta-1 px-4 py-3 rounded-xl text-white">
+                      Complete Transfer
+                    </button>
+                  </div>
+                )}
+
                 {detail && (
                   <div className="col-span-2 mt-8 font-semibold text-white flex items-start gap-3">
                     <button
                       className="bg-cta rounded-2xl px-10 py-4"
-                      onClick={() => setIsOpen((bool) => !bool)}
+                      onClick={() =>
+                        !isOpenTransfer && setIsOpen((bool) => !bool)
+                      }
                     >
                       Initiate License Product
                     </button>
                     <button
                       className="bg-cta rounded-2xl px-10 py-4"
-                      onClick={handleProductTransfer}
+                      onClick={() =>
+                        !isOpen && setIsOpenTransfer((item) => !item)
+                      }
                     >
                       Transfer Product
                     </button>
