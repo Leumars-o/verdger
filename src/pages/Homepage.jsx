@@ -307,6 +307,64 @@ export default function Homepage() {
             <img src={howItWorks} alt="" />
           </figure>
         </section>
+
+        <section className="bg-primary-light bg-opacity-30 py-24 px-32 overflow-hidden">
+          <h2 className="text-28 text-cta-1 mb-10">
+            Frequently Asked Questions?
+          </h2>
+
+          <ul className="grid grid-cols-3">
+            <li className="bg-white h-35 px-8 rounded-3xl">
+              <h3 className="text-[2.5rem] text-cta-1 font-light py-10 border-b-2 border-primary">
+                How do I register an Item on Verdger
+              </h3>
+              <p className="py-8 text-[1.8rem] text-cta-1 font-light">
+                Simply add the item to your assets through the dashboard. A
+                unique blockchain ID will be automatically generated.
+              </p>
+            </li>
+
+            <li className="bg-white h-35 px-8 rounded-3xl">
+              <h3 className="text-[2.5rem] text-cta-1 font-light py-10 border-b-2 border-primary">
+                How do I register an Item on Verdger
+              </h3>
+              <p className="py-8 text-[1.8rem] text-cta-1 font-light">
+                Simply add the item to your assets through the dashboard. A
+                unique blockchain ID will be automatically generated.
+              </p>
+            </li>
+
+            <li className="bg-white h-35 px-8 rounded-3xl">
+              <h3 className="text-[2.5rem] text-cta-1 font-light py-10 border-b-2 border-primary">
+                How do I register an Item on Verdger
+              </h3>
+              <p className="py-8 text-[1.8rem] text-cta-1 font-light">
+                Simply add the item to your assets through the dashboard. A
+                unique blockchain ID will be automatically generated.
+              </p>
+            </li>
+
+            <li className="bg-white h-35 px-8 rounded-3xl">
+              <h3 className="text-[2.5rem] text-cta-1 font-light py-10 border-b-2 border-primary">
+                How do I register an Item on Verdger
+              </h3>
+              <p className="py-8 text-[1.8rem] text-cta-1 font-light">
+                Simply add the item to your assets through the dashboard. A
+                unique blockchain ID will be automatically generated.
+              </p>
+            </li>
+
+            <li className="bg-white h-35 px-8 rounded-3xl">
+              <h3 className="text-[2.5rem] text-cta-1 font-light py-10 border-b-2 border-primary">
+                How do I register an Item on Verdger
+              </h3>
+              <p className="py-8 text-[1.8rem] text-cta-1 font-light">
+                Simply add the item to your assets through the dashboard. A
+                unique blockchain ID will be automatically generated.
+              </p>
+            </li>
+          </ul>
+        </section>
       </main>
     </>
   );

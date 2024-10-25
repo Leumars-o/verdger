@@ -24,6 +24,7 @@ export default {
       },
       height: {
         19: "19rem",
+        35: "35rem",
       },
       boxShadow: {
         "inner-custom": "inset 0 2px 8px rgba(0, 0, 0, 0.25)",
