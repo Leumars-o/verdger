@@ -1,8 +1,9 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useEffect } from "react";
 import { handleGetProductBySearch } from "../firebase/firestone";
+import { AppConfig, showConnect, UserSession } from "@stacks/connect";
 
 // images
 import vergerLogo from "../assets/verger-logo.svg";
@@ -21,6 +22,10 @@ export default function Homepage() {
   const [isSeaching, setIsSearching] = useState(false);
   const [error, setError] = useState("");
 
+  // login and signup
+  const [address, setAddress] = useState(sessionStorage.productOwner || "");
+  const navigate = useNavigate();
+
   useEffect(
     function () {
       if (!error) return;
@@ -30,6 +35,24 @@ export default function Homepage() {
     },
     [error]
   );
+  const appConfig = new AppConfig(["store_write", "publish_data"]);
+  const userSession = new UserSession({ appConfig });
+
+  const handleAuthenticate = function () {
+    if (address) return navigate("/user");
+
+    showConnect({
+      appDetails: {
+        name: "Verdger",
+        icon: window.location.orgin + "/assets/verger-logo.svg",
+      },
+      onFinish: () => {
+        const user = userSession.loadUserData();
+        setAddress(user.profile.stxAddress.testnet);
+        sessionStorage.setItem("productOwner", user.profile.stxAddress.testnet);
+      },
+    });
+  };
 
   const handleSearch = async function (e) {
     e.preventDefault();
@@ -77,10 +100,16 @@ export default function Homepage() {
         </ul>
 
         <div className="flex items-center gap-8">
-          <button className="bg-white border-2 border-btn-dark px-12 py-3 rounded-xl text-cta">
+          <button
+            className="bg-white border-2 border-btn-dark px-12 py-3 rounded-xl text-cta"
+            onClick={handleAuthenticate}
+          >
             Login
           </button>
-          <button className="bg-cta-1 text-white rounded-xl px-12 py-3">
+          <button
+            className="bg-cta-1 text-white rounded-xl px-12 py-3"
+            onClick={handleAuthenticate}
+          >
             Sign up
           </button>
         </div>
