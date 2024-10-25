@@ -6,6 +6,9 @@ import vergerLogo from "../assets/verger-logo.svg";
 import dashboardShot from "../assets/dashboard-shot.svg";
 import expBlock from "../assets/exp-block.svg";
 import blockchainImage from "../assets/blockchain-img.svg";
+import ownershipImg from "../assets/ownership-img.svg";
+import originImg from "../assets/origin-img.svg";
+import transparencyImg from "../assets/transparency-img.svg";
 
 export default function Homepage() {
   return (
@@ -74,9 +77,9 @@ export default function Homepage() {
             </h2>
           </div>
 
-          <ul className="grid grid-cols-3 mt-20">
-            <li className="bg-white border-2 border-primary rounded-3xl shadow-inner-custom h-96 px-10 py-14 flex items-start gap-8">
-              <figure className="w-20 h-auto">
+          <ul className="grid grid-cols-5 gap-6 mt-20">
+            <li className="bg-white border-2 col-span-2 border-primary rounded-3xl shadow-inner-custom h-96 px-8 py-14 flex items-start gap-14">
+              <figure className="w-32 h-auto">
                 <img
                   src={blockchainImage}
                   alt=""
@@ -91,6 +94,66 @@ export default function Homepage() {
                   a secure and tamper-proof record of product information
                   ensuring that that once data is recorded, it remains immutable
                   and verifiable by all parties.
+                </p>
+              </div>
+            </li>
+
+            <li className="bg-white border-2 col-span-3 border-primary rounded-3xl shadow-inner-custom h-96 px-8 py-14 flex items-start gap-14">
+              <figure className="w-32 h-auto">
+                <img
+                  src={ownershipImg}
+                  alt=""
+                  className="w-full h-full block object-cover"
+                />
+              </figure>
+
+              <div className="h-full w-2/3 flex flex-col items-stretch gap-3">
+                <h3 className="font-light text-28">Ownership</h3>
+                <p className="text-16 text-justify font-light hyphens-auto">
+                  Easily transfer or receive ownership of assets with full
+                  traceability on Verdger, This creates trust between parties
+                  and eliminates the risk of disputes over authenticity or
+                  ownership.
+                </p>
+              </div>
+            </li>
+
+            <li className="bg-white border-2 col-span-3 border-primary rounded-3xl shadow-inner-custom h-96 px-8 py-14 flex items-start gap-14">
+              <figure className="w-32 h-auto">
+                <img
+                  src={originImg}
+                  alt=""
+                  className="w-full h-full block object-cover"
+                />
+              </figure>
+
+              <div className="h-full w-2/3 flex flex-col items-stretch gap-3">
+                <h3 className="font-light text-28">Origin</h3>
+                <p className="text-16 text-justify font-light hyphens-auto">
+                  With Verdger, you can trace every product back to its origin.
+                  Whether it’s a piece of jewelry, electronics, or valuable
+                  goods. This transparency helps validate the authenticity of
+                  products and provides insights into their entire lifecycle.
+                </p>
+              </div>
+            </li>
+
+            <li className="bg-white border-2 col-span-2 border-primary rounded-3xl shadow-inner-custom h-96 px-8 py-14 flex items-start gap-14">
+              <figure className="w-32 h-auto">
+                <img
+                  src={transparencyImg}
+                  alt=""
+                  className="w-full h-full block object-cover"
+                />
+              </figure>
+
+              <div className="h-full w-2/3 flex flex-col items-stretch gap-3">
+                <h3 className="font-light text-28">Transparency</h3>
+                <p className="text-16 text-justify font-light hyphens-auto">
+                  Verdger ensures end-to-end transparency throughout the supply
+                  chain by making each product&apos;s journey visible to all
+                  stakeholders. All changes from registration to ownership
+                  changes are all recorded on the blockchain.
                 </p>
               </div>
             </li>
