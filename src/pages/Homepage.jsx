@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 // images
 import vergerLogo from "../assets/verger-logo.svg";
 import dashboardShot from "../assets/dashboard-shot.svg";
+import expBlock from "../assets/exp-block.svg";
 
 export default function Homepage() {
   return (
@@ -61,6 +62,18 @@ export default function Homepage() {
           />
         </figure>
       </header>
+
+      <main>
+        <section className="bg-primary-light bg-opacity-30 pt-24">
+          <div className="flex flex-col items-center gap-8">
+            <img src={expBlock} alt="" />
+            <h2 className="text-[3.7rem] font-light w-3/4 text-center">
+              Verdger combines supply chain and digital identity management on
+              the blockchain to provide product verification.
+            </h2>
+          </div>
+        </section>
+      </main>
     </>
   );
 }
