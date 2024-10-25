@@ -45,7 +45,7 @@ export default function Homepage() {
         <form className="flex items-center justify-center gap-4 text-16 w-full">
           <input
             type="text"
-            className="bg-primary-light w-1/2 px-10 py-8 border-2 border-primary outline-none rounded-xl"
+            className="bg-primary-light w-[85rem] px-10 py-8 border-2 border-primary outline-none rounded-xl"
             placeholder="Enter the name of the product here"
           />
           <button className="bg-cta-1 text-white rounded-xl px-24 py-8">
@@ -53,8 +53,12 @@ export default function Homepage() {
           </button>
         </form>
 
-        <figure className="mt-auto">
-          <img src={dashboardShot} alt="" />
+        <figure className="mt-auto overflow-hidden">
+          <img
+            src={dashboardShot}
+            alt="dashboard shot"
+            className="w-full h-full"
+          />
         </figure>
       </header>
     </>
