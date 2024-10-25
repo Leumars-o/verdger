@@ -17,3 +17,9 @@ body {
   width: 100vw;
   overflow-x: hidden;
 }
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  appearance: none;
+  -webkit-appearance: none;
+}
