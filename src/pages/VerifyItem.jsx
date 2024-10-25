@@ -5,9 +5,11 @@ import {
 } from "../firebase/firestone";
 import { useParams } from "react-router-dom";
 import { StacksTestnet } from "@stacks/network";
-import { openContractCall } from "@stacks/connect";
+import { openContractCall, showConnect } from "@stacks/connect";
 import { principalCV, uintCV } from "@stacks/transactions";
 import { useTransactionStatus } from "../hooks/useTransactionStatus";
+import { Link } from "react-router-dom";
+import { chain } from "../variable";
 
 function VerifyItem() {
   const { id } = useParams();
@@ -100,7 +102,21 @@ function VerifyItem() {
 
     await openContractCall(options);
   };
-  const handleProductTransfer = async function () {};
+  const handleProductTransfer = async function () {
+    const functionArgs = [];
+
+    const options = {
+      contractAddress: "ST3DRW5EAHRNFXYAW9ZXT1Q6BQ0GXMDEX0ARXDCMA",
+      contractName: "",
+      functionName: "",
+      functionArgs,
+      appDetails: {
+        name: "Verdger",
+        icon: window.location.origin + "/assets/verger-logo.svg",
+      },
+      // onFinish:
+    };
+  };
 
   return (
     <section className="flex flex-col items-center flex-1 gap-2 px-10 py-20 bg-opacity-30 bg-primary min-h-screen overflow-y-auto">
@@ -154,8 +170,12 @@ function VerifyItem() {
                   {item.productOwner.slice(0, 16) + "...."}
                 </li>
                 <li>
-                  <span className="font-medium">Blockchain ID:</span>{" "}
-                  {item.blockchainId.slice(0, 16) + "...."}
+                  <Link
+                    to={`https://explorer.hiro.so/txid/${item.blockchainId}?chain=${chain}`}
+                  >
+                    <span className="font-medium">View on blockchain:</span>{" "}
+                    {item.blockchainId.slice(0, 16) + "...."}
+                  </Link>
                 </li>
                 <li>
                   <span className="font-medium">Ownership:</span> Transferred
@@ -209,7 +229,10 @@ function VerifyItem() {
                       className="outline-none w-1/3 px-4 py-3 rounded-xl"
                     />
 
-                    <button className="bg-cta-1 px-4 py-3 rounded-xl text-white">
+                    <button
+                      className="bg-cta-1 px-4 py-3 rounded-xl text-white"
+                      onClick={handleProductTransfer}
+                    >
                       Complete Transfer
                     </button>
                   </div>
