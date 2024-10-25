@@ -10,7 +10,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Dashboard />}>
+        <Route path="/user" element={<Dashboard />}>
           <Route index element={<DashboardMenu />} />
           <Route path="dashboard" element={<DashboardMenu />} />
           <Route path="verify-item" element={<VerifyItem />} />

@@ -17,7 +17,7 @@ function Dashboard() {
         <ul className="flex flex-col gap-10 text-16">
           <li>
             <Link
-              to="/dashboard"
+              to="/user/dashboard"
               className="flex items-center w-full gap-3 px-4 py-6 transition-colors duration-500 rounded-xl hover:bg-secondary"
             >
               <img src={dashIcon} alt="icon for dashboard" />
@@ -27,7 +27,7 @@ function Dashboard() {
 
           <li>
             <Link
-              to="/verify-item"
+              to="/user/verify-item"
               className="flex items-center w-full gap-3 px-4 py-6 transition-colors duration-500 rounded-xl hover:bg-secondary"
             >
               <img src={verifyIcon} alt="icon for dashboard" />
@@ -37,7 +37,7 @@ function Dashboard() {
 
           <li>
             <Link
-              to="/my-assets"
+              to="/user/my-assets"
               className="flex items-center w-full gap-3 px-4 py-6 transition-colors duration-500 rounded-xl hover:bg-secondary"
             >
               <img src={assetIcon} alt="icon for dashboard" />

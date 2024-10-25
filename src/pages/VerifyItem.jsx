@@ -86,7 +86,7 @@ function VerifyItem() {
           await handleUpdateProduct(pId, {
             productOwner: licensee,
             ownerHistory: [
-              product[0].owner,
+              product[0].productOwner,
               licensee,
               ...(product[0].ownerHistory || ""),
             ],
