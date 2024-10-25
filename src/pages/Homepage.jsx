@@ -9,8 +9,30 @@ import blockchainImage from "../assets/blockchain-img.svg";
 import ownershipImg from "../assets/ownership-img.svg";
 import originImg from "../assets/origin-img.svg";
 import transparencyImg from "../assets/transparency-img.svg";
+import { useState } from "react";
+import { useEffect } from "react";
 
 export default function Homepage() {
+  const [search, setSearch] = useState("");
+  const [error, setError] = useState("");
+
+  useEffect(
+    function () {
+      if (!error) return;
+      const timer = setTimeout(() => setError(""), 3000);
+
+      return () => clearTimeout(timer);
+    },
+    [error]
+  );
+
+  const handleSearch = async function (e) {
+    e.preventDefault();
+    setError("");
+
+    if (!search) return setError("There is no search value");
+  };
+
   return (
     <>
       <nav className="bg-white flex items-center justify-between px-20 py-12 text-16">
@@ -47,12 +69,21 @@ export default function Homepage() {
           Keep your items secured and verified on the blockchain
         </h1>
 
-        <form className="flex items-center justify-center gap-4 text-16 w-full">
+        <form
+          className="flex items-center justify-center gap-4 text-16 w-full relative"
+          onSubmit={handleSearch}
+        >
           <input
             type="text"
             className="bg-primary-light w-[85rem] px-10 py-8 border-2 border-primary outline-none rounded-xl"
             placeholder="Enter the name of the product here"
+            onChange={(e) => setSearch(e.target.value)}
           />
+          {error && (
+            <p className="absolute top-32 left-[26rem] text-red-800 transition-all duration-700">
+              {error}
+            </p>
+          )}
           <button className="bg-cta-1 text-white rounded-xl px-24 py-8">
             Check
           </button>
