@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import vergerLogo from "../assets/verger-logo.svg";
 import dashboardShot from "../assets/dashboard-shot.svg";
 import expBlock from "../assets/exp-block.svg";
+import blockchainImage from "../assets/blockchain-img.svg";
 
 export default function Homepage() {
   return (
@@ -64,14 +65,36 @@ export default function Homepage() {
       </header>
 
       <main>
-        <section className="bg-primary-light bg-opacity-30 pt-24">
+        <section className="bg-primary-light bg-opacity-30 py-24 px-32 overflow-hidden">
           <div className="flex flex-col items-center gap-8">
             <img src={expBlock} alt="" />
-            <h2 className="text-[3.7rem] font-light w-3/4 text-center">
+            <h2 className="text-[3.4rem] font-light w-3/4 text-center">
               Verdger combines supply chain and digital identity management on
               the blockchain to provide product verification.
             </h2>
           </div>
+
+          <ul className="grid grid-cols-3 mt-20">
+            <li className="bg-white border-2 border-primary rounded-3xl shadow-inner-custom h-96 px-10 py-14 flex items-start gap-8">
+              <figure className="w-20 h-auto">
+                <img
+                  src={blockchainImage}
+                  alt=""
+                  className="w-full h-full block object-cover"
+                />
+              </figure>
+
+              <div className="h-full flex-1 flex flex-col items-stretch gap-3">
+                <h3 className="font-light text-28">Blockchain</h3>
+                <p className="text-16 text-justify font-light hyphens-auto">
+                  Verdger leverages the power of blockchain technology to create
+                  a secure and tamper-proof record of product information
+                  ensuring that that once data is recorded, it remains immutable
+                  and verifiable by all parties.
+                </p>
+              </div>
+            </li>
+          </ul>
         </section>
       </main>
     </>
