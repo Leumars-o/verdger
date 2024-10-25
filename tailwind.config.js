@@ -7,6 +7,7 @@ export default {
         primary: "#E6E6E6",
         secondary: "#CCCCCC",
         cta: "#323232",
+        "cta-1": "#1A2B3B",
       },
       fontSize: {
         12: "1.2rem",
