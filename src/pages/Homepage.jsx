@@ -15,6 +15,7 @@ import originImg from "../assets/origin-img.svg";
 import transparencyImg from "../assets/transparency-img.svg";
 import howItWorks from "../assets/howItWorks.svg";
 import list from "../assets/list.svg";
+import socials from "../assets/socials.svg";
 
 export default function Homepage() {
   const [search, setSearch] = useState("");
@@ -403,6 +404,17 @@ export default function Homepage() {
           </article>
         </section>
       </main>
+
+      <footer className="px-32 py-8 bg-primary-light bg-opacity-30 border-opacity-30 border-t-2 border-secondary text-16 flex items-center gap-8">
+        <p>&copy; 2024</p>
+        <ul className="flex gap-8 mr-auto">
+          <li>Contact us</li>
+          <li>Privacy Policy</li>
+          <li>Terms of use</li>
+        </ul>
+
+        <img src={socials} alt="" />
+      </footer>
     </>
   );
 }
