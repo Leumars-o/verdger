@@ -5,11 +5,13 @@ import Dashboard from "./pages/Dashboard";
 import DashboardMenu from "./pages/DashboardMenu";
 import VerifyItem from "./pages/VerifyItem";
 import Assets from "./pages/Assets";
+import Homepage from "./pages/Homepage";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/" element={<Homepage />} />
         <Route path="/user" element={<Dashboard />}>
           <Route index element={<DashboardMenu />} />
           <Route path="dashboard" element={<DashboardMenu />} />
