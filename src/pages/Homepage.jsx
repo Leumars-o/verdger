@@ -80,6 +80,10 @@ export default function Homepage() {
     setProduct(undefined);
   };
 
+  const handleSubcribe = function (e) {
+    e.preventDefault();
+  };
+
   return (
     <>
       <nav className="bg-white flex items-center justify-between px-20 py-12 text-16">
@@ -390,7 +394,10 @@ export default function Homepage() {
               your email and no worries, we won’t spam your inbox.
             </p>
 
-            <form className="flex items-stretch justify-center gap-6 text-16 w-full">
+            <form
+              className="flex items-stretch justify-center gap-6 text-16 w-full"
+              onSubmit={handleSubcribe}
+            >
               <input
                 type="email"
                 placeholder="Your email address"
