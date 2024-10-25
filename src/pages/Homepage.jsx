@@ -377,6 +377,31 @@ export default function Homepage() {
             </li>
           </ul>
         </section>
+
+        <section className="bg-primary-light bg-opacity-30 py-24 px-32 flex items-center justify-center">
+          <article className="rounded-3xl bg-cta-1 bg-opacity-60 flex flex-col items-center justify-between py-10 px-8 w-full text-white h-[26rem]">
+            <h2 className="text-[4rem] font-semibold">
+              Let&apos;s keep in touch
+            </h2>
+
+            <p className="text-16 text-center w-1/2">
+              Stay updated and receive latest updates on our BETA release, Drop
+              your email and no worries, we won’t spam your inbox.
+            </p>
+
+            <form className="flex items-stretch justify-center gap-6 text-16 w-full">
+              <input
+                type="email"
+                placeholder="Your email address"
+                className="bg-transparent outline-none border-b-2 border-b-white px-6 py-3 w-1/3"
+                required
+              />
+              <button className="bg-white text-cta-1 px-10 rounded-2xl">
+                Subscribe
+              </button>
+            </form>
+          </article>
+        </section>
       </main>
     </>
   );
