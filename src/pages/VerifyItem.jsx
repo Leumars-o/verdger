@@ -54,16 +54,21 @@ function VerifyItem() {
         icon: window.location.origin + "/src/assets/verger-logo.svg",
       },
       onFinish: async function (data) {
+        setError("");
         trackTransaction(data.txId);
 
-        const update = await handleUpdateProduct(pId, {
-          productOwner: licensee,
-          ownerHistory: [
-            product.owner,
-            licensee,
-            ...(product.ownerHistory || ""),
-          ],
-        });
+        try {
+          await handleUpdateProduct(pId, {
+            productOwner: licensee,
+            ownerHistory: [
+              product.owner,
+              licensee,
+              ...(product.ownerHistory || ""),
+            ],
+          });
+        } catch (error) {
+          setError(error.message);
+        }
       },
     };
 
