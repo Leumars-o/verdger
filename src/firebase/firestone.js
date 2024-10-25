@@ -60,3 +60,19 @@ export const handleGetProductById = async function (productId) {
 
   return getData;
 };
+
+export const handleGetProductBySearch = async function (searchQuery) {
+  const firebaseQuery = query(
+    collection(db, "products"),
+    where("productId", "==", searchQuery)
+  );
+
+  const getData = await getDocs(firebaseQuery);
+
+  if (!getData)
+    throw new Error(
+      "There is a problem with your internet or product doesn't exist"
+    );
+
+  return getData;
+};
