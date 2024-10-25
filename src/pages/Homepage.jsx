@@ -50,6 +50,7 @@ export default function Homepage() {
         const user = userSession.loadUserData();
         setAddress(user.profile.stxAddress.testnet);
         sessionStorage.setItem("productOwner", user.profile.stxAddress.testnet);
+        navigate("/user");
       },
     });
   };
