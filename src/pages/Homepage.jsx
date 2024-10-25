@@ -1,5 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useEffect } from "react";
+import { handleGetProductBySearch } from "../firebase/firestone";
 
 // images
 import vergerLogo from "../assets/verger-logo.svg";
@@ -9,9 +12,8 @@ import blockchainImage from "../assets/blockchain-img.svg";
 import ownershipImg from "../assets/ownership-img.svg";
 import originImg from "../assets/origin-img.svg";
 import transparencyImg from "../assets/transparency-img.svg";
-import { useState } from "react";
-import { useEffect } from "react";
-import { handleGetProductBySearch } from "../firebase/firestone";
+import howItWorks from "../assets/howItWorks.svg";
+import list from "../assets/list.svg";
 
 export default function Homepage() {
   const [search, setSearch] = useState("");
@@ -264,6 +266,16 @@ export default function Homepage() {
               </div>
             </li>
           </ul>
+        </section>
+
+        <section className="flex items-center justify-between px-32 py-24">
+          <figure>
+            <img src={list} alt="" />
+          </figure>
+
+          <figure>
+            <img src={howItWorks} alt="" />
+          </figure>
         </section>
       </main>
     </>
