@@ -41,13 +41,38 @@ function VerifyItem() {
     [id]
   );
 
+  // check if licensee transaction is a success
+  useEffect(
+    function () {
+      async function updateStatus() {
+        setError("");
+        try {
+          await handleUpdateProduct(pId, {
+            isLicense:
+              status === "success"
+                ? true
+                : status === "pending"
+                ? "pending"
+                : "failed",
+          });
+        } catch (error) {
+          setError("error updating the product status: ", error.message);
+        }
+      }
+
+      if (pId) updateStatus();
+    },
+    [status, pId]
+  );
+
   const handleLicenseProduct = async function () {
-    const functionArgs = [uintCV(product.productId), principalCV(licensee)];
+    const functionArgs = [uintCV(product[0].productId), principalCV(licensee)];
 
     const options = {
       network: new StacksTestnet(),
       contractAddress: "ST3DRW5EAHRNFXYAW9ZXT1Q6BQ0GXMDEX0ARXDCMA",
       contractName: "authentify-v4",
+      functionName: "license-product",
       functionArgs,
       appDetails: {
         name: "Verdger",
@@ -61,9 +86,9 @@ function VerifyItem() {
           await handleUpdateProduct(pId, {
             productOwner: licensee,
             ownerHistory: [
-              product.owner,
+              product[0].owner,
               licensee,
-              ...(product.ownerHistory || ""),
+              ...(product[0].ownerHistory || ""),
             ],
           });
         } catch (error) {
