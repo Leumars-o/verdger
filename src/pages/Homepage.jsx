@@ -15,7 +15,7 @@ import { handleGetProductBySearch } from "../firebase/firestone";
 
 export default function Homepage() {
   const [search, setSearch] = useState("");
-  const [product, setProduct] = useState("");
+  const [product, setProduct] = useState(undefined);
   const [isSeaching, setIsSearching] = useState(false);
   const [error, setError] = useState("");
 
@@ -47,6 +47,10 @@ export default function Homepage() {
     } finally {
       setIsSearching(false);
     }
+  };
+
+  const handleCloseProduct = function () {
+    setProduct(undefined);
   };
 
   return (
@@ -110,7 +114,7 @@ export default function Homepage() {
           <article className="w-[85rem] flex items-center gap-8 text-13">
             <figure className="w-1/3">
               <img
-                src={product.productImage}
+                src={product?.productImage}
                 alt=""
                 className="w-full h-full rounded-2xl"
               />
@@ -119,7 +123,7 @@ export default function Homepage() {
             <ul className="grid flex-1 grid-cols-2 gap-2">
               <li>
                 <span className="font-medium">Date Created:</span>{" "}
-                {new Date(product.createdAt).toLocaleDateString("en-GB", {
+                {new Date(product?.createdAt).toLocaleDateString("en-GB", {
                   day: "numeric",
                   month: "long",
                   year: "numeric",
@@ -127,11 +131,11 @@ export default function Homepage() {
               </li>
               <li>
                 <span className="font-medium">Registered By:</span>{" "}
-                {product.productOwner.slice(0, 16) + "...."}
+                {product?.productOwner?.slice(0, 16) + "...."}
               </li>
               <li>
                 <span className="font-medium">Blockchain ID:</span>{" "}
-                {product.blockchainId.slice(0, 16) + "...."}
+                {product?.blockchainId?.slice(0, 16) + "...."}
               </li>
               {/* <li>
                 <span className="font-medium">Ownership:</span> Transferred
@@ -149,6 +153,13 @@ export default function Homepage() {
                 <span className="font-medium">Description: </span>
                 {product.productDes}
               </li>
+
+              <button
+                className="text-left bg-cta-1 text-white px-5 py-2 rounded-lg w-1/2 mt-3"
+                onClick={handleCloseProduct}
+              >
+                Close Product
+              </button>
             </ul>
           </article>
         )}
