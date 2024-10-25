@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { handleGetProductById } from "../firebase/firestone";
+import {
+  handleGetProductById,
+  handleUpdateProduct,
+} from "../firebase/firestone";
 import { useParams } from "react-router-dom";
 import { StacksTestnet } from "@stacks/network";
 import { openContractCall } from "@stacks/connect";
 import { principalCV, uintCV } from "@stacks/transactions";
+import { useTransactionStatus } from "../hooks/useTransactionStatus";
 
 function VerifyItem() {
   const { id } = useParams();
@@ -11,6 +15,8 @@ function VerifyItem() {
   const [licensee, setLicensee] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [detail, setDetail] = useState(false);
+  const [pId, setPID] = useState("");
+  const { trackTransaction, status } = useTransactionStatus();
 
   const [error, setError] = useState("");
 
@@ -23,6 +29,7 @@ function VerifyItem() {
         try {
           const data = await handleGetProductById(Number(id));
           const productData = data.docs.map((doc) => doc.data());
+          data.forEach((doc) => setPID(doc.id));
           setProduct(productData);
         } catch (error) {
           setError(error.message);
@@ -46,8 +53,17 @@ function VerifyItem() {
         name: "Verdger",
         icon: window.location.origin + "/src/assets/verger-logo.svg",
       },
-      onFinish: function (data) {
-        console.log(data.txId);
+      onFinish: async function (data) {
+        trackTransaction(data.txId);
+
+        const update = await handleUpdateProduct(pId, {
+          productOwner: licensee,
+          ownerHistory: [
+            product.owner,
+            licensee,
+            ...(product.ownerHistory || ""),
+          ],
+        });
       },
     };
 
