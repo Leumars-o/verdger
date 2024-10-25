@@ -11,9 +11,12 @@ import originImg from "../assets/origin-img.svg";
 import transparencyImg from "../assets/transparency-img.svg";
 import { useState } from "react";
 import { useEffect } from "react";
+import { handleGetProductBySearch } from "../firebase/firestone";
 
 export default function Homepage() {
   const [search, setSearch] = useState("");
+  const [product, setProduct] = useState("");
+  const [isSeaching, setIsSearching] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(
@@ -31,6 +34,19 @@ export default function Homepage() {
     setError("");
 
     if (!search) return setError("There is no search value");
+
+    try {
+      setIsSearching(true);
+      const data = await handleGetProductBySearch(search);
+      if (data.docs.length === 0)
+        throw new Error("There is no product that match your search results");
+
+      data.forEach((docs) => setProduct(docs.data()));
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setIsSearching(false);
+    }
   };
 
   return (
@@ -85,9 +101,57 @@ export default function Homepage() {
             </p>
           )}
           <button className="bg-cta-1 text-white rounded-xl px-24 py-8">
-            Check
+            {!isSeaching && "Check"}
+            {isSeaching && "Searching"}
           </button>
         </form>
+
+        {product && (
+          <article className="w-[85rem] flex items-center gap-8 text-13">
+            <figure className="w-1/3">
+              <img
+                src={product.productImage}
+                alt=""
+                className="w-full h-full rounded-2xl"
+              />
+            </figure>
+
+            <ul className="grid flex-1 grid-cols-2 gap-2">
+              <li>
+                <span className="font-medium">Date Created:</span>{" "}
+                {new Date(product.createdAt).toLocaleDateString("en-GB", {
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric",
+                })}
+              </li>
+              <li>
+                <span className="font-medium">Registered By:</span>{" "}
+                {product.productOwner.slice(0, 16) + "...."}
+              </li>
+              <li>
+                <span className="font-medium">Blockchain ID:</span>{" "}
+                {product.blockchainId.slice(0, 16) + "...."}
+              </li>
+              {/* <li>
+                <span className="font-medium">Ownership:</span> Transferred
+              </li> */}
+              <li>
+                <span className="font-medium">Product Name:</span>{" "}
+                {product.productName}
+              </li>
+              <li>
+                <span className="font-medium">Status:</span>{" "}
+                {product.status === "abort_by_response" && "Failed"}
+                {product.status === "success" && "Success"}
+              </li>
+              <li className="col-span-2">
+                <span className="font-medium">Description: </span>
+                {product.productDes}
+              </li>
+            </ul>
+          </article>
+        )}
 
         <figure className="mt-auto overflow-hidden">
           <img

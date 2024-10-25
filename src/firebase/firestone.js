@@ -64,7 +64,7 @@ export const handleGetProductById = async function (productId) {
 export const handleGetProductBySearch = async function (searchQuery) {
   const firebaseQuery = query(
     collection(db, "products"),
-    where("productId", "==", searchQuery)
+    where("productName", "==", searchQuery)
   );
 
   const getData = await getDocs(firebaseQuery);
