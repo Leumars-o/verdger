@@ -108,7 +108,7 @@ function Assets() {
                     </div>
 
                     <Link
-                      to={`/verify-item/${product.productId}`}
+                      to={`/user/verify-item/${product.productId}`}
                       className="w-full py-2 text-white text-center bg-cta rounded-xl text-13"
                     >
                       Product Details
