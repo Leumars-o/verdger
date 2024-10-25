@@ -49,14 +49,11 @@ function VerifyItem() {
     function () {
       async function updateStatus() {
         setError("");
+        if (status === "pending") return;
+
         try {
           await handleUpdateProduct(pId, {
-            isLicense:
-              status === "success"
-                ? true
-                : status === "pending"
-                ? "pending"
-                : "failed",
+            isLicense: status,
           });
         } catch (error) {
           setError("error updating the product status: ", error.message);
@@ -65,7 +62,7 @@ function VerifyItem() {
 
       if (pId) updateStatus();
     },
-    [status, pId]
+    [pId, status]
   );
 
   const handleLicenseProduct = async function () {
@@ -89,8 +86,13 @@ function VerifyItem() {
           await handleUpdateProduct(pId, {
             productOwner: licensee,
             ownerHistory: [
-              product[0].productOwner,
-              licensee,
+              {
+                sender: product[0].productOwner,
+                receiver: licensee,
+                blockchainId: data.txId,
+                transferType: "license",
+                createdAt: new Date().toISOString(),
+              },
               ...(product[0].ownerHistory || ""),
             ],
           });
@@ -172,6 +174,8 @@ function VerifyItem() {
                 <li>
                   <Link
                     to={`https://explorer.hiro.so/txid/${item.blockchainId}?chain=${chain}`}
+                    target="_blank"
+                    className="underline underline-offset-1 hover:underline-offset-4"
                   >
                     <span className="font-medium">View on blockchain:</span>{" "}
                     {item.blockchainId.slice(0, 16) + "...."}
