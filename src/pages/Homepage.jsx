@@ -313,10 +313,10 @@ export default function Homepage() {
             Frequently Asked Questions?
           </h2>
 
-          <ul className="grid grid-cols-3">
+          <ul className="grid grid-cols-3 gap-8">
             <li className="bg-white h-35 px-8 rounded-3xl">
               <h3 className="text-[2.5rem] text-cta-1 font-light py-10 border-b-2 border-primary">
-                How do I register an Item on Verdger
+                How do I register an Item on Verdger?
               </h3>
               <p className="py-8 text-[1.8rem] text-cta-1 font-light">
                 Simply add the item to your assets through the dashboard. A
@@ -326,41 +326,53 @@ export default function Homepage() {
 
             <li className="bg-white h-35 px-8 rounded-3xl">
               <h3 className="text-[2.5rem] text-cta-1 font-light py-10 border-b-2 border-primary">
-                How do I register an Item on Verdger
+                Can I Transfer Ownership of an Item?
               </h3>
               <p className="py-8 text-[1.8rem] text-cta-1 font-light">
-                Simply add the item to your assets through the dashboard. A
-                unique blockchain ID will be automatically generated.
+                Yes, Verdger allows easy ownership transfers, with all changes
+                recorded on the blockchain.
               </p>
             </li>
 
             <li className="bg-white h-35 px-8 rounded-3xl">
               <h3 className="text-[2.5rem] text-cta-1 font-light py-10 border-b-2 border-primary">
-                How do I register an Item on Verdger
+                What happens if an item is flagged as stolen?
               </h3>
               <p className="py-8 text-[1.8rem] text-cta-1 font-light">
-                Simply add the item to your assets through the dashboard. A
-                unique blockchain ID will be automatically generated.
+                The item’s status will update, and you will be notified. Others
+                can view the flagged status when verifying the item.
               </p>
             </li>
 
             <li className="bg-white h-35 px-8 rounded-3xl">
               <h3 className="text-[2.5rem] text-cta-1 font-light py-10 border-b-2 border-primary">
-                How do I register an Item on Verdger
+                Can anyone see the journey of my registered items?
               </h3>
               <p className="py-8 text-[1.8rem] text-cta-1 font-light">
-                Simply add the item to your assets through the dashboard. A
-                unique blockchain ID will be automatically generated.
+                Yes, anyone with the item’s unique ID can track and verify its
+                journey.
               </p>
             </li>
 
             <li className="bg-white h-35 px-8 rounded-3xl">
               <h3 className="text-[2.5rem] text-cta-1 font-light py-10 border-b-2 border-primary">
-                How do I register an Item on Verdger
+                Can I recover an item flagged as stolen?
               </h3>
               <p className="py-8 text-[1.8rem] text-cta-1 font-light">
-                Simply add the item to your assets through the dashboard. A
-                unique blockchain ID will be automatically generated.
+                Yes, if an asset is flagged as stolen and later recovered, you
+                can update its status through your dashboard to reflect that it
+                is no longer missing.
+              </p>
+            </li>
+
+            <li className="bg-white h-35 px-8 rounded-3xl">
+              <h3 className="text-[2.5rem] text-cta-1 font-light py-10 border-b-2 border-primary">
+                Are they any fees for registering assets on Verdger
+              </h3>
+              <p className="py-8 text-[1.8rem] text-cta-1 font-light">
+                Some blockchain transactions may incur minimal gas fees,
+                depending on the network. Verdger will notify you of any
+                applicable fees before completing the registration process.
               </p>
             </li>
           </ul>
