@@ -258,7 +258,7 @@ function DashboardMenu() {
             </figure>
 
             <div className="flex flex-col leading-tight">
-              <span className="font-semibold text-28">12</span>
+              <span className="font-semibold text-28">{products.length}</span>
               <span className="text-12">All items</span>
             </div>
           </li>
