@@ -285,6 +285,11 @@ function VerifyItem() {
                 {product.status === "success" && "Transaction Succeed"}
               </li>
 
+              <li>
+                <span className="font-medium">Product ID:</span>{" "}
+                {product && product.productId}
+              </li>
+
               {detail && (
                 <li className="col-span-2">
                   <span className="font-medium">Description: </span>
