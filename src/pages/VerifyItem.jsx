@@ -5,7 +5,7 @@ import {
 } from "../firebase/firestone";
 import { useParams } from "react-router-dom";
 import { StacksTestnet } from "@stacks/network";
-import { openContractCall, showConnect } from "@stacks/connect";
+import { openContractCall } from "@stacks/connect";
 import { principalCV, uintCV } from "@stacks/transactions";
 import { useTransactionStatus } from "../hooks/useTransactionStatus";
 import { Link } from "react-router-dom";
@@ -15,6 +15,7 @@ function VerifyItem() {
   const { id } = useParams();
   const [product, setProduct] = useState([]);
   const [licensee, setLicensee] = useState("");
+  const [transferCode, setTransferCode] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenTransfer, setIsOpenTransfer] = useState(false);
   const [detail, setDetail] = useState(false);
@@ -86,6 +87,7 @@ function VerifyItem() {
           await handleUpdateProduct(pId, {
             productOwner: licensee,
             ownerHistory: [
+              ...(product[0].ownerHistory || ""),
               {
                 sender: product[0].productOwner,
                 receiver: licensee,
@@ -93,7 +95,6 @@ function VerifyItem() {
                 transferType: "license",
                 createdAt: new Date().toISOString(),
               },
-              ...(product[0].ownerHistory || ""),
             ],
           });
         } catch (error) {
@@ -104,20 +105,46 @@ function VerifyItem() {
 
     await openContractCall(options);
   };
+
   const handleProductTransfer = async function () {
-    const functionArgs = [];
+    const functionArgs = [
+      uintCV(pId),
+      principalCV(licensee),
+      uintCV(transferCode),
+    ];
 
     const options = {
       contractAddress: "ST3DRW5EAHRNFXYAW9ZXT1Q6BQ0GXMDEX0ARXDCMA",
-      contractName: "",
-      functionName: "",
+      contractName: "authentify-v4",
+      functionName: "initiate-transfer",
       functionArgs,
       appDetails: {
         name: "Verdger",
         icon: window.location.origin + "/assets/verger-logo.svg",
       },
-      // onFinish:
+      onFinish: async function (data) {
+        trackTransaction(data.txId);
+
+        try {
+          await handleUpdateProduct(pId, {
+            ownerHistory: [
+              ...(product[0].ownerHistory || ""),
+              {
+                sender: product[0].productOwner,
+                receiver: licensee,
+                blockchainId: data.txId,
+                transferType: "initiate-transfer",
+                createdAt: new Date().toISOString(),
+              },
+            ],
+          });
+        } catch (error) {
+          console.log(error.message);
+        }
+      },
     };
+
+    await openContractCall(options);
   };
 
   return (
@@ -226,11 +253,13 @@ function VerifyItem() {
                       type="number"
                       placeholder="Enter a four digit transfer code"
                       className="outline-none w-1/3 px-4 py-3 rounded-xl"
+                      onChange={(e) => setTransferCode(e.target.value)}
                     />
                     <input
                       type="text"
                       placeholder="Enter a owner address"
                       className="outline-none w-1/3 px-4 py-3 rounded-xl"
+                      onChange={(e) => setLicensee(e.target.value)}
                     />
 
                     <button
