@@ -56,7 +56,7 @@ function Dashboard() {
 
           <li>
             <Link
-              to="/user/my-assets"
+              to="/user/accept-transfer"
               className={`flex items-center w-full gap-3 px-4 py-6 transition-colors duration-500 rounded-xl hover:bg-secondary ${
                 pathname.includes("accept-transfer") ? "bg-secondary" : ""
               }`}
