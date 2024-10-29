@@ -24,10 +24,17 @@ export function SearchProviderContext({ children }) {
     try {
       setIsSearching(true);
       const data = await handleGetProductBySearch(Number(search));
-      if (data.docs.length === 0)
-        throw new Error("There is no product that match your search results");
+      if (!data) return setSearchErr("No data returned from search");
 
-      data.forEach((docs) => setProduct(docs.data()));
+      if (!data.docs)
+        return setSearchErr("Data does not contain 'docs' property");
+
+      if (data.docs.length === 0)
+        return setSearchErr(
+          "There is no product that match your search results"
+        );
+
+      data.forEach((docs) => docs && setProduct(docs.data()));
     } catch (error) {
       setSearchErr(error.message);
     } finally {
