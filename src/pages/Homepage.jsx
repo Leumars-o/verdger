@@ -27,6 +27,10 @@ console.log(
   )
 );
 
+// 0x070100000000000000000000000000000006
+
+console.log(cvToJSON(hexToCV("0x070100000000000000000000000000000006")));
+
 export default function Homepage() {
   const {
     product,

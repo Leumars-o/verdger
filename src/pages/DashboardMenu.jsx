@@ -58,9 +58,9 @@ function DashboardMenu() {
   // update product
   useEffect(
     function () {
-      async function updateProduct() {
-        if (!pId && status === "pending") return;
+      if (!pId || status === "pending") return;
 
+      async function updateProduct() {
         try {
           await handleUpdateProduct(pId, { status: status });
         } catch (error) {
@@ -332,8 +332,7 @@ function DashboardMenu() {
             {products &&
               products.map(
                 (product, i) =>
-                  product.status === "success" &&
-                  i >= 2 && (
+                  product.status === "success" && (
                     <article
                       className="flex flex-col items-center w-1/3 gap-5 px-4 py-4 bg-secondary bg-opacity-20 rounded-3xl"
                       key={i}
