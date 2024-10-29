@@ -7,6 +7,7 @@ import VerifyItem from "./pages/VerifyItem";
 import Assets from "./pages/Assets";
 import Homepage from "./pages/Homepage";
 import { SearchProviderContext } from "./context/searchContext";
+import AcceptTransfer from "./pages/AcceptTransfer";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
             <Route path="verify-item" element={<VerifyItem />} />
             <Route path="verify-item/:id" element={<VerifyItem />} />
             <Route path="my-assets" element={<Assets />} />
+            <Route path="accept-transfer" element={<AcceptTransfer />} />
           </Route>
         </Routes>
       </BrowserRouter>
