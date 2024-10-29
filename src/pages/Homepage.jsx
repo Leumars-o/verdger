@@ -2,7 +2,6 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useEffect } from "react";
-import { handleGetProductBySearch } from "../firebase/firestone";
 import { AppConfig, showConnect, UserSession } from "@stacks/connect";
 
 // images
@@ -16,12 +15,19 @@ import transparencyImg from "../assets/transparency-img.svg";
 import howItWorks from "../assets/howItWorks.svg";
 import list from "../assets/list.svg";
 import socials from "../assets/socials.svg";
+import { searchProvider } from "../context/searchContext";
 
 export default function Homepage() {
+  const {
+    product,
+    setProduct,
+    isSearching,
+    searchErr,
+    setSearchErr,
+    handleSearch,
+  } = searchProvider();
+
   const [search, setSearch] = useState("");
-  const [product, setProduct] = useState(undefined);
-  const [isSeaching, setIsSearching] = useState(false);
-  const [error, setError] = useState("");
 
   // login and signup
   const [address, setAddress] = useState(sessionStorage.productOwner || "");
@@ -29,12 +35,12 @@ export default function Homepage() {
 
   useEffect(
     function () {
-      if (!error) return;
-      const timer = setTimeout(() => setError(""), 3000);
+      if (!searchErr) return;
+      const timer = setTimeout(() => setSearchErr(""), 3000);
 
       return () => clearTimeout(timer);
     },
-    [error]
+    [searchErr]
   );
   const appConfig = new AppConfig(["store_write", "publish_data"]);
   const userSession = new UserSession({ appConfig });
@@ -56,23 +62,19 @@ export default function Homepage() {
     });
   };
 
-  const handleSearch = async function (e) {
+  const handleFormSearch = async function (e) {
     e.preventDefault();
-    setError("");
 
-    if (!search) return setError("There is no search value");
+    if (!search) return setSearchErr("There is no search value");
 
     try {
-      setIsSearching(true);
-      const data = await handleGetProductBySearch(Number(search));
+      const data = await handleSearch(search);
       if (data.docs.length === 0)
         throw new Error("There is no product that match your search results");
 
       data.forEach((docs) => setProduct(docs.data()));
     } catch (error) {
-      setError(error.message);
-    } finally {
-      setIsSearching(false);
+      setSearchErr(error.message);
     }
   };
 
@@ -128,7 +130,7 @@ export default function Homepage() {
 
         <form
           className="flex items-center justify-center gap-4 text-16 w-full relative"
-          onSubmit={handleSearch}
+          onSubmit={handleFormSearch}
         >
           <input
             type="text"
@@ -136,14 +138,14 @@ export default function Homepage() {
             placeholder="Enter the name of the product here"
             onChange={(e) => setSearch(e.target.value)}
           />
-          {error && (
+          {searchErr && (
             <p className="absolute top-32 left-[26rem] text-red-800 transition-all duration-700">
-              {error}
+              {searchErr}
             </p>
           )}
           <button className="bg-cta-1 text-white rounded-xl px-24 py-8">
-            {!isSeaching && "Check"}
-            {isSeaching && "Searching"}
+            {!isSearching && "Check"}
+            {isSearching && "Searching"}
           </button>
         </form>
 

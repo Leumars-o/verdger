@@ -15,12 +15,12 @@ const searchContext = createContext();
 export function SearchProviderContext({ children }) {
   const [product, setProduct] = useState("");
   const [isSearching, setIsSearching] = useState(false);
-  const [searchErr, setSeachErr] = useState("");
+  const [searchErr, setSearchErr] = useState("");
 
   const handleSearch = async function (search) {
-    setSeachErr("");
+    setSearchErr("");
 
-    if (!search) return setSeachErr("There is no search value");
+    if (!search) return setSearchErr("There is no search value");
 
     try {
       setIsSearching(true);
@@ -30,7 +30,7 @@ export function SearchProviderContext({ children }) {
 
       data.forEach((docs) => setProduct(docs.data()));
     } catch (error) {
-      setSeachErr(error.message);
+      setSearchErr(error.message);
     } finally {
       setIsSearching(false);
     }
@@ -38,7 +38,14 @@ export function SearchProviderContext({ children }) {
 
   return (
     <searchContext.Provider
-      value={{ product, isSearching, searchErr, handleSearch }}
+      value={{
+        product,
+        setProduct,
+        isSearching,
+        searchErr,
+        setSearchErr,
+        handleSearch,
+      }}
     >
       {children}
     </searchContext.Provider>
