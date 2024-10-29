@@ -54,7 +54,17 @@ function Dashboard() {
             </Link>
           </li>
 
-          <li></li>
+          <li>
+            <Link
+              to="/user/my-assets"
+              className={`flex items-center w-full gap-3 px-4 py-6 transition-colors duration-500 rounded-xl hover:bg-secondary ${
+                pathname.includes("accept-transfer") ? "bg-secondary" : ""
+              }`}
+            >
+              <img src={assetIcon} alt="icon for dashboard" />
+              <span>Accept Transfer</span>
+            </Link>
+          </li>
         </ul>
       </aside>
 
