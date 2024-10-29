@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 export function useTransactionStatus(initialTxId = null) {
   const [txId, setTxId] = useState(initialTxId);
   const [status, setStatus] = useState("pending");
+  const [hex, setHex] = useState("");
   const [error, setError] = useState(null);
   const [isPolling, setIsPolling] = useState(false);
 
@@ -20,6 +21,7 @@ export function useTransactionStatus(initialTxId = null) {
       const data = await res.json();
       return {
         status: data.tx_status,
+        hex: data.tx_result.hex,
       };
     } catch (err) {
       console.error("Error checking transaction status:", err);
@@ -52,6 +54,7 @@ export function useTransactionStatus(initialTxId = null) {
           if (result.status === "success") {
             isPollingRef.current = false;
             setIsPolling(false);
+            setHex(result.hex);
           }
         }
       } catch (err) {
@@ -103,9 +106,10 @@ export function useTransactionStatus(initialTxId = null) {
   }, []);
 
   return {
+    hex,
     txId,
-    status,
     error,
+    status,
     isPolling,
     trackTransaction,
   };
