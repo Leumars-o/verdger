@@ -9,9 +9,9 @@ import assetIcon from "../assets/asset-icon.svg";
 function Dashboard() {
   return (
     <main className="flex h-screen overflow-hidden">
-      <aside className="flex flex-col justify-start w-1/5 py-20 pl-20 pr-4 bg-primary">
-        <figure className="mb-24">
-          <img src={verger} alt="verger logo icon" />
+      <aside className="flex flex-col justify-start w-80 py-20 pl-10 pr-4 bg-primary">
+        <figure className="mb-24 w-60">
+          <img src={verger} alt="verger logo icon" className="w-full" />
         </figure>
 
         <ul className="flex flex-col gap-10 text-16">
