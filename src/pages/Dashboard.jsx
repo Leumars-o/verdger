@@ -1,11 +1,11 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import verger from "../assets/verger-logo.svg";
 import dashIcon from "../assets/dash-icon.svg";
 import verifyIcon from "../assets/verify-icon.svg";
 import assetIcon from "../assets/asset-icon.svg";
-import { useLocation } from "react-router-dom";
 
 function Dashboard() {
   const { pathname } = useLocation();
