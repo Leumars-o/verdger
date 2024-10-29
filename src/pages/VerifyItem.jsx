@@ -48,7 +48,7 @@ function VerifyItem() {
   // check if licensee transaction is a success
   useEffect(
     function () {
-      if (!pId && status === "pending") return;
+      if ((!pId && status === "pending") || transferCode) return;
 
       async function updateStatus() {
         setError("");
@@ -64,7 +64,36 @@ function VerifyItem() {
 
       updateStatus();
     },
-    [pId, status]
+    [status]
+  );
+
+  // check if transfer is successful
+  useEffect(
+    function () {
+      if (!transferCode || status === "pending") return;
+
+      async function updateStatus() {
+        setError("");
+
+        try {
+          await handleUpdateProduct(pId, {
+            transferHistory: [
+              ...(product[0].transferHistory || ""),
+              {
+                isTransfer: status,
+                sender: product[0].productOwner,
+                receiver: licensee,
+              },
+            ],
+          });
+        } catch (error) {
+          setError("error updating the product status: ", error.message);
+        }
+      }
+
+      updateStatus();
+    },
+    [status]
   );
 
   const handleLicenseProduct = async function () {
@@ -109,9 +138,9 @@ function VerifyItem() {
 
   const handleProductTransfer = async function () {
     const functionArgs = [
-      uintCV(pId),
+      uintCV(product[0].productId),
       principalCV(licensee),
-      uintCV(transferCode),
+      uintCV(Number(transferCode)),
     ];
 
     const options = {
