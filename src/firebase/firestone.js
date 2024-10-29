@@ -76,3 +76,20 @@ export const handleGetProductBySearch = async function (searchQuery) {
 
   return getData;
 };
+
+export const handleQueryTransferProduct = async function (receiver) {
+  const firebaseQuery = query(collection(db, "products"));
+  const getData = await getDocs(firebaseQuery);
+
+  const filterData = getData.docs.filter((doc) => {
+    const ownerHistory = doc.data().ownerHistory || [];
+    return ownerHistory.some((entry) => entry.receiver === receiver);
+  });
+
+  if (!getData || getData.empty)
+    throw new Error(
+      "There is a problem with your internet or product doesn't exist"
+    );
+
+  return filterData.map((doc) => doc.data());
+};
