@@ -3,6 +3,7 @@ import {
   handleGetProductById,
   handleUpdateProduct,
 } from "../firebase/firestone";
+
 import { useParams } from "react-router-dom";
 import { StacksTestnet } from "@stacks/network";
 import { openContractCall } from "@stacks/connect";
@@ -11,6 +12,7 @@ import { useTransactionStatus } from "../hooks/useTransactionStatus";
 import { Link } from "react-router-dom";
 import { chain } from "../variable";
 import { searchProvider } from "../context/searchContext";
+import { cvToJSON, hexToCV } from "@stacks/transactions";
 
 function VerifyItem() {
   const { id } = useParams();
@@ -20,7 +22,7 @@ function VerifyItem() {
   const [isOpenTransfer, setIsOpenTransfer] = useState(false);
   const [detail, setDetail] = useState(false);
   const [pId, setPID] = useState("");
-  const { trackTransaction, status } = useTransactionStatus();
+  const { trackTransaction, status, hex } = useTransactionStatus();
 
   const [error, setError] = useState("");
 
@@ -229,6 +231,7 @@ function VerifyItem() {
         Type your product/item ID in the input field above to verify the
         authenticity of your item
       </p>
+      {/* {hex && } */}
       {searchErr && <p className="text-center">{searchErr}</p>}
       {error && <p className="text-center">{error}</p>}
 

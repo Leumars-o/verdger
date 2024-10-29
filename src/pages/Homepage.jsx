@@ -198,6 +198,10 @@ export default function Homepage() {
                 {product.status === "abort_by_response" && "Failed"}
                 {product.status === "success" && "Success"}
               </li>
+              <li>
+                <span className="font-medium">Product ID:</span>
+                {product && product.productId}
+              </li>
               <li className="col-span-2">
                 <span className="font-medium">Description: </span>
                 {product.productDes}
