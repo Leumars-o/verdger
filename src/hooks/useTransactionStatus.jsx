@@ -10,7 +10,7 @@ export function useTransactionStatus(initialTxId = null) {
   const pollingTimeoutRef = useRef(null);
   const isPollingRef = useRef(false);
 
-  const checkStatus = useCallback(async (txId) => {
+  const checkStatus = useCallback(async function (txId) {
     try {
       const res = await fetch(
         `https://api.testnet.hiro.so/extended/v1/tx/${txId}`
@@ -28,7 +28,7 @@ export function useTransactionStatus(initialTxId = null) {
   }, []);
 
   const pollStatus = useCallback(
-    async (currentTxId) => {
+    async function (currentTxId) {
       if (!currentTxId || !isPollingRef.current) return;
 
       try {

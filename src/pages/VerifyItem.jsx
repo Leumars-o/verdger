@@ -139,7 +139,7 @@ function VerifyItem() {
             ],
           });
         } catch (error) {
-          console.log(error.message);
+          setError(error.message);
         }
       },
     };
