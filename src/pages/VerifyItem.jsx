@@ -48,9 +48,10 @@ function VerifyItem() {
   // check if licensee transaction is a success
   useEffect(
     function () {
+      if (!pId && status === "pending") return;
+
       async function updateStatus() {
         setError("");
-        if (status === "pending") return;
 
         try {
           await handleUpdateProduct(pId, {
@@ -61,7 +62,7 @@ function VerifyItem() {
         }
       }
 
-      if (pId) updateStatus();
+      updateStatus();
     },
     [pId, status]
   );
