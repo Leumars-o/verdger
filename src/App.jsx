@@ -10,9 +10,9 @@ import { SearchProviderContext } from "./context/searchContext";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <SearchProviderContext>
+    <SearchProviderContext>
+      <BrowserRouter>
+        <Routes>
           <Route path="/" element={<Homepage />} />
           <Route path="/user" element={<Dashboard />}>
             <Route index element={<DashboardMenu />} />
@@ -21,9 +21,9 @@ function App() {
             <Route path="verify-item/:id" element={<VerifyItem />} />
             <Route path="my-assets" element={<Assets />} />
           </Route>
-        </SearchProviderContext>
-      </Routes>
-    </BrowserRouter>
+        </Routes>
+      </BrowserRouter>
+    </SearchProviderContext>
   );
 }
 

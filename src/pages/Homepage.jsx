@@ -17,6 +17,16 @@ import list from "../assets/list.svg";
 import socials from "../assets/socials.svg";
 import { searchProvider } from "../context/searchContext";
 
+// import { cvToJSON, hexToCV } from "@stacks/transactions";
+
+// console.log(
+//   cvToJSON(
+//     hexToCV(
+//       "0x080c0000000204636f64650100000000000000000000000000000070076d6573736167650d00000017496e76616c69642070726f64756374206c6963656e7365"
+//     )
+//   )
+// );
+
 export default function Homepage() {
   const {
     product,

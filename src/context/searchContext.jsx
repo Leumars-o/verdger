@@ -8,7 +8,6 @@ import { handleGetProductBySearch } from "../firebase/firestone";
 SearchProviderContext.propTypes = {
   children: PropTypes.node.isRequired,
 };
-SearchProviderContext.propType = {};
 
 const searchContext = createContext();
 
@@ -53,7 +52,7 @@ export function SearchProviderContext({ children }) {
 }
 
 export function searchProvider() {
-  const context = useContext();
+  const context = useContext(searchContext);
 
   if (!context) throw new Error("context is used out of scope");
 
