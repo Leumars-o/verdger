@@ -20,7 +20,7 @@ export default function AcceptTransfer() {
     async function getTransferProduct() {
       try {
         const data = await handleQueryTransferProduct(
-          "ST3DRW5EAHRNFXYAW9ZXT1Q6BQ0GXMDEX0ARXDCMA"
+          sessionStorage.productOwner
         );
 
         setProducts(data);
