@@ -1,6 +1,6 @@
 
-;; title: authentify
-;; version: 0.1.0
+;; title: authentify-v2
+;; version: 0.2.0
 ;; summary: Authentify is a smart contract for managing authentication and verification of products.
 ;; description:
 
@@ -10,9 +10,12 @@
 ;; token definitions
 ;;
 
+;; Define Contract
+;; (define-constant AUTHORIZED_CONTRACT 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.authentify-v2)
+
 ;; constants
 ;;
-(define-constant MAX_PRODUCT_ID u1000000)
+(define-constant MAX_PRODUCT_ID u10000000000000)
 (define-constant MIN_NAME_LENGTH u1)
 (define-constant MIN_DESCRIPTION_LENGTH u1)
 
@@ -144,7 +147,7 @@
         (caller tx-sender)
         (block-time (unwrap! (get-block-info? time u0) (err-with-message ERR_INVALID_GET_RESPONSE)))
     )
-    (asserts! (is-eq caller (as-contract tx-sender)) (err-with-message ERR_UNAUTHORIZED))
+    ;; (asserts! (is-eq caller (AUTHORIZED_CONTRACT tx-sender)) (err-with-message ERR_UNAUTHORIZED))
     (asserts! (valid-product-id? product-id) (err-with-message ERR_INVALID_PRODUCT_ID))
     (asserts! (valid-name? name) (err-with-message ERR_INVALID_NAME))
     (asserts! (valid-description? description) (err-with-message ERR_INVALID_DESCRIPTION))
@@ -231,7 +234,7 @@
             (caller tx-sender)
             (product (unwrap! (map-get? products { product-id: product-id }) (err-with-message ERR_PRODUCT_NOT_FOUND)))
             (license (unwrap! (map-get? product-licenses { product-id: product-id }) (err-with-message ERR_INVALID_PRODUCT_LICENSE)))
-            (block-time (unwrap! (get-block-info? time u0) (err-with-message ERR_INVALID_GET_RESPONSE)))
+            (block-time (unwrap! (get-block-info? time block-height u0) (err-with-message ERR_INVALID_GET_RESPONSE)))
             (transfer-id (generate-transfer-id))
             (existing-transfers (default-to { transfer-history: (list) } (map-get? product-transfers { product-id: product-id })))
         )

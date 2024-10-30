@@ -11,7 +11,7 @@ plan:
         - contract-publish:
             contract-name: authentify
             expected-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
-            cost: 113540
+            cost: 170610
             path: contracts/authentify.clar
             anchor-block-only: true
             clarity-version: 2
