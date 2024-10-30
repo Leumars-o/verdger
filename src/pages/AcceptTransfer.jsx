@@ -12,7 +12,7 @@ export default function AcceptTransfer() {
   const [products, setProducts] = useState([]);
   const [code, setCode] = useState("");
 
-  const { trackTransaction, status, hex } = useTransactionStatus();
+  const { trackTransaction } = useTransactionStatus();
 
   useEffect(function () {
     if (!sessionStorage.productOwner) return;
@@ -31,17 +31,6 @@ export default function AcceptTransfer() {
 
     getTransferProduct();
   }, []);
-
-  // useEffect(
-  //   function () {
-  //     if (!hex || status === "pending") return;
-
-  //     async update() {}
-
-  //     update()
-  //   },
-  //   [status, hex]
-  // );
 
   const handleTransfer = async function () {
     const functionArgs = [
