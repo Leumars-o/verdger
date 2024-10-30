@@ -6,10 +6,13 @@ import { Link } from "react-router-dom";
 import { chain } from "../variable";
 import { openContractCall } from "@stacks/connect";
 import { uintCV } from "@stacks/transactions";
+import { useTransactionStatus } from "../hooks/useTransactionStatus";
 
 export default function AcceptTransfer() {
   const [products, setProducts] = useState([]);
   const [code, setCode] = useState("");
+
+  const { trackTransaction, status, hex } = useTransactionStatus();
 
   useEffect(function () {
     if (!sessionStorage.productOwner) return;
@@ -29,8 +32,22 @@ export default function AcceptTransfer() {
     getTransferProduct();
   }, []);
 
+  // useEffect(
+  //   function () {
+  //     if (!hex || status === "pending") return;
+
+  //     async update() {}
+
+  //     update()
+  //   },
+  //   [status, hex]
+  // );
+
   const handleTransfer = async function () {
-    const functionArgs = [uintCV(), uintCV(Number(code))];
+    const functionArgs = [
+      uintCV(products[0]?.tansferHistory[0]?.transferId),
+      uintCV(Number(code)),
+    ];
 
     const options = {
       contractAddress: "ST3DRW5EAHRNFXYAW9ZXT1Q6BQ0GXMDEX0ARXDCMA",
@@ -39,7 +56,7 @@ export default function AcceptTransfer() {
       functionArgs,
       appDetails: {},
       onFinish: async function (data) {
-        console.log(data.txId);
+        trackTransaction(data.txId);
       },
     };
 
@@ -79,7 +96,8 @@ export default function AcceptTransfer() {
                 <span>
                   Receiver:{" "}
                   {product.ownerHistory.map(
-                    (item) =>
+                    (item, i) =>
+                      i == 0 &&
                       item.receiver ===
                         "ST3DRW5EAHRNFXYAW9ZXT1Q6BQ0GXMDEX0ARXDCMA" &&
                       "ST3DRW5EAHRNFXYAW9ZXT1Q6BQ0GXMDEX0ARXDCMA".slice(0, 16) +
@@ -90,7 +108,8 @@ export default function AcceptTransfer() {
                 <span>
                   Sender:{" "}
                   {product.ownerHistory.map(
-                    (item) =>
+                    (item, i) =>
+                      i === 0 &&
                       item.receiver ===
                         "ST3DRW5EAHRNFXYAW9ZXT1Q6BQ0GXMDEX0ARXDCMA" &&
                       item.sender.slice(0, 16) + "..."
@@ -112,7 +131,8 @@ export default function AcceptTransfer() {
                     onClick={handleTransfer}
                   >
                     {product.ownerHistory.map(
-                      (item) =>
+                      (item, i) =>
+                        i === 0 &&
                         item.transferType === "initiate-transfer" &&
                         "Accept Product"
                     )}
