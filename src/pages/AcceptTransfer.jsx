@@ -9,6 +9,7 @@ import { uintCV } from "@stacks/transactions";
 
 export default function AcceptTransfer() {
   const [products, setProducts] = useState([]);
+  const [code, setCode] = useState("");
 
   useEffect(function () {
     if (!sessionStorage.productOwner) return;
@@ -96,16 +97,27 @@ export default function AcceptTransfer() {
                   )}
                 </span>
 
-                <button
-                  className="bg-cta text-white px-4 py-2 rounded-lg col-start-4"
-                  onClick={handleTransfer}
-                >
-                  {product.ownerHistory.map(
-                    (item) =>
-                      item.transferType === "initiate-transfer" &&
-                      "Accept Product"
-                  )}
-                </button>
+                <input
+                  type="number"
+                  placeholder="Enter Transfer Code to accept product"
+                  className="px-4 py-2 outline-none focus:border-2 focus:border-secondary transition-all rounded-md col-span-2"
+                  onChange={(e) => setCode(e.target.value)}
+                  value={code}
+                  autoFocus
+                />
+
+                {code.length === 4 && (
+                  <button
+                    className="bg-cta text-white px-4 py-2 rounded-lg col-start-4"
+                    onClick={handleTransfer}
+                  >
+                    {product.ownerHistory.map(
+                      (item) =>
+                        item.transferType === "initiate-transfer" &&
+                        "Accept Product"
+                    )}
+                  </button>
+                )}
               </div>
             </li>
           ))}
