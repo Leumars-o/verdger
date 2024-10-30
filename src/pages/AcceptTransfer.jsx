@@ -1,8 +1,11 @@
 import React from "react";
 import { useEffect } from "react";
 import { handleQueryTransferProduct } from "../firebase/firestone";
+import { useState } from "react";
 
 export default function AcceptTransfer() {
+  const [products, setProducts] = useState([]);
+
   useEffect(function () {
     if (!sessionStorage.productOwner) return;
 
@@ -12,7 +15,7 @@ export default function AcceptTransfer() {
           "ST3DRW5EAHRNFXYAW9ZXT1Q6BQ0GXMDEX0ARXDCMA"
         );
 
-        console.log(data);
+        setProducts(data);
       } catch (error) {
         console.log(error);
       }
@@ -27,7 +30,31 @@ export default function AcceptTransfer() {
         Pending Transfers
       </h1>
 
-      <ul></ul>
+      <ul>
+        {products &&
+          products.map((product, i) => (
+            <li key={i}>
+              <figure className="w-32 h-32 overflow-hidden">
+                <img
+                  src={product.productImage}
+                  alt="product image"
+                  className="w-full h-full"
+                />
+              </figure>
+              <span>Product Name: {product.productName}</span>
+              <span>Product ID: {product.productId}</span>
+              <span>Blockchain ID: {product.blockchainId}</span>
+              <span>
+                Receiver:{" "}
+                {product.ownerHistory.map(
+                  (item) =>
+                    item.receiver ===
+                    "ST3DRW5EAHRNFXYAW9ZXT1Q6BQ0GXMDEX0ARXDCMA"
+                )}
+              </span>
+            </li>
+          ))}
+      </ul>
     </section>
   );
 }

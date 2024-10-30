@@ -123,16 +123,10 @@ export default function Homepage() {
 
         <div className="flex items-center gap-8">
           <button
-            className="bg-white border-2 border-btn-dark px-12 py-3 rounded-xl text-cta"
+            className="bg-cta-1 text-white rounded-xl px-12 py-6"
             onClick={handleAuthenticate}
           >
-            Login
-          </button>
-          <button
-            className="bg-cta-1 text-white rounded-xl px-12 py-3"
-            onClick={handleAuthenticate}
-          >
-            Sign up
+            Connect Wallet
           </button>
         </div>
       </nav>
