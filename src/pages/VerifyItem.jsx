@@ -85,6 +85,12 @@ function VerifyItem() {
     function () {
       if (!transferCode || status === "pending") return;
 
+      // convert the blockchainresponse to json
+      const blockchainResponse = cvToJSON(hexToCV(hex));
+
+      if (!blockchainResponse.success)
+        return setError(blockchainResponse.value.value.message.value);
+
       async function updateStatus() {
         setError("");
 
@@ -96,6 +102,7 @@ function VerifyItem() {
                 isTransfer: status,
                 sender: product[0].productOwner,
                 receiver: licensee,
+                transferId: blockchainResponse.value.value,
               },
             ],
           });
