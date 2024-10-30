@@ -10,8 +10,14 @@ Ownership Transfers: The contract supports initiating, accepting, and canceling 
 Dispute Handling: Product creators can dispute the authenticity of their products by setting a dispute code (stolen, lost, damaged).
 Read-Only Functions: The contract provides several read-only functions to retrieve product, license, and transfer details.
 
-Contract calls:
+### Contract calls:
+
+- Create new Product
+
 `(define-public (create-product (product-id uint) (name (string-ascii 50)) (description (string-ascii 256))))`
+This function allows an authorized entity to create a new product with the specified product-id, name, and description.
+
+
 
 ### Read-Only Functions
 The contract provides several read-only functions to retrieve information about products, licenses, and transfers:
