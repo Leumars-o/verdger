@@ -30,7 +30,7 @@ export default function AcceptTransfer() {
   }, []);
 
   const handleTransfer = async function () {
-    const functionArgs = [uintCV()];
+    const functionArgs = [uintCV(), uintCV(Number(code))];
 
     const options = {
       contractAddress: "ST3DRW5EAHRNFXYAW9ZXT1Q6BQ0GXMDEX0ARXDCMA",
