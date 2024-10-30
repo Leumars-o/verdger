@@ -86,6 +86,8 @@ function VerifyItem() {
       if (!transferCode || status === "pending") return;
 
       // convert the blockchainresponse to json
+      if (!hex) return setError("Product not created");
+
       const blockchainResponse = cvToJSON(hexToCV(hex));
 
       if (!blockchainResponse.success)
@@ -239,8 +241,14 @@ function VerifyItem() {
         authenticity of your item
       </p>
       {/* {hex && } */}
-      {searchErr && <p className="text-center">{searchErr}</p>}
-      {error && <p className="text-center">{error}</p>}
+      {searchErr && (
+        <p className="text-center text-16 text-red-800">{searchErr}</p>
+      )}
+      {error && (
+        <p className="text-center text-16 text-red-800 font-semibold">
+          {error}
+        </p>
+      )}
 
       {product && !Array.isArray(product) && (
         <React.Fragment>

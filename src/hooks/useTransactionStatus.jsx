@@ -19,9 +19,25 @@ export function useTransactionStatus(initialTxId = null) {
       if (!res.ok) throw new Error("Failed to fetch transaction status");
 
       const data = await res.json();
+
+      // Extract hex value from different possible locations in the response
+      let hexValue = "";
+      if (
+        data.tx_status === "success" ||
+        data.tx_status === "abort_by_response"
+      ) {
+        hexValue = data.tx_result?.hex || data.tx_result?.repr || "";
+      }
+
+      console.log("Transaction status response:", {
+        status: data.tx_status,
+        hex: hexValue,
+        fullResponse: data,
+      });
+
       return {
         status: data.tx_status,
-        hex: data.tx_result.hex,
+        hex: hexValue,
       };
     } catch (err) {
       console.error("Error checking transaction status:", err);
@@ -40,21 +56,26 @@ export function useTransactionStatus(initialTxId = null) {
         if (currentTxId === txId) {
           setStatus(result.status);
 
+          // Set hex value whenever it's available
+          if (result.hex) {
+            setHex(result.hex);
+          }
+
           if (result.status === "pending" && isPollingRef.current) {
             pollingTimeoutRef.current = setTimeout(() => {
               pollStatus(currentTxId);
             }, 3000);
-          }
-
-          if (result.status === "abort_by_response") {
+          } else if (
+            result.status === "abort_by_response" ||
+            result.status === "success"
+          ) {
             isPollingRef.current = false;
             setIsPolling(false);
-          }
 
-          if (result.status === "success") {
-            isPollingRef.current = false;
-            setIsPolling(false);
-            setHex(result.hex);
+            // Double-check hex value is set for these final states
+            if (result.hex) {
+              setHex(result.hex);
+            }
           }
         }
       } catch (err) {
@@ -73,6 +94,7 @@ export function useTransactionStatus(initialTxId = null) {
 
     setIsPolling(true);
     setError(null);
+    setHex(""); // Reset hex when starting new polling
     isPollingRef.current = true;
     pollStatus(txId);
   }, [txId, pollStatus]);
@@ -102,6 +124,7 @@ export function useTransactionStatus(initialTxId = null) {
 
     setTxId(newTxId);
     setStatus("pending");
+    setHex(""); // Reset hex when tracking new transaction
     setError(null);
   }, []);
 
