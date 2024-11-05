@@ -1,0 +1,40 @@
+#V2
+(contract-call? .authentify create-product u1234 "patek phillipe" "very sharp patek watch for you my guy" )
+(contract-call? .authentify get-product-details u1234)
+(contract-call? .authentify license-product u1234 'STNHKEPYEPJ8ET55ZZ0M5A34J0R3N5FM2CMMMAZ6)
+(contract-call? .authentify get-product-details u1234)
+(contract-call? .authentify create-product u1234 "Patek Phillipe" "This one na Original my guy")
+(contract-call? .authentify get-product-info u1234)
+(contract-call? .authentify get-product-details u1234)
+(contract-call? .authentify  create-product u1234 "Patek Phillipe" "Very Sharp Watch bro")
+(contract-call? .authentify  get-product-details u1234)
+(contract-call? .authentify  get-license-details u1234)
+(contract-call? .authentify  get-all-transfers u1234)
+(contract-call? .authentify  transfer-ownership u1234 'STNHKEPYEPJ8ET55ZZ0M5A34J0R3N5FM2CMMMAZ6)
+(contract-call? .authentify  license-product u1234 'STNHKEPYEPJ8ET55ZZ0M5A34J0R3N5FM2CMMMAZ6)
+(contract-call? .authentify  get-license-details u1234)
+(contract-call? .authentify  get-all-transfers u1234)
+(contract-call? .authentify  get-product-details u1234)
+(contract-call? .authentify  get-transfer-details u1234)
+map
+--help
+::help
+::get_assets_maps
+::set_tx_sender STNHKEPYEPJ8ET55ZZ0M5A34J0R3N5FM2CMMMAZ6
+(contract-call? ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.authentify transfer-ownership u1234 'ST1SJ3DTE5DN7X54YDH5D64R3BCB6A2AG2ZQ8YPD5)
+(contract-call? 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.authentify transfer-ownership u1234 'ST1SJ3DTE5DN7X54YDH5D64R3BCB6A2AG2ZQ8YPD5)
+(contract-call? 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.authentify get-transfer-details u1234)
+(contract-call? 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.authentify get-license-details u1234)
+(contract-call? 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.authentify get-all-transfers u1234)
+(contract-call? 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.authentify get-transfer-details u1)
+(contract-call? 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.authentify get-transfer-details u0)
+(contract-call? 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.authentify create-product u45678 "Rolex" "no dey ask questions bro, na original")
+::set_tx_sender ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
+(contract-call? 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.authentify create-product u45678 "Rolex" "no dey ask questions bro, na original")
+(contract-call? 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.authentify get-product-details u45678)
+(contract-call? 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.authentify get-product-details u1234)
+(contract-call? .authentify  license-product u45678 'STNHKEPYEPJ8ET55ZZ0M5A34J0R3N5FM2CMMMAZ6)
+(contract-call? 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.authentify get-product-details u45678)
+(contract-call? 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.authentify get-license-details u1234)
+(contract-call? 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.authentify get-license-details u45678)
+(contract-call? .authentify create-product u1234 "Rolex watch" "My original Rolex watch for sale")
