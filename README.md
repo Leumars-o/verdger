@@ -1,4 +1,5 @@
 ## Authentify-v2 Smart Contract
+![{B142C4D9-C632-4587-A885-FA14B23A90CB}](https://github.com/user-attachments/assets/fc454d4f-1484-4e8f-9b85-b147938ac38a)
 
   
 
@@ -9,6 +10,7 @@ The authentify-v2 smart contract is designed for managing the authentication and
   
 
 ### Key Features
+![{A385D461-FC97-4831-8F3D-C14E5D11E70C}](https://github.com/user-attachments/assets/87b8887e-1304-4728-8996-21d7e77ff548)
 
 - Product Creation: The contract allows authorized entities to create new products by providing a unique product ID, name, and description.
 
